@@ -10,6 +10,12 @@
           <div  :style="`background:url(${$axios.defaults.baseURL+item.url}) center center  ;height:700px;`" >  </div>
         </el-carousel-item>
       </el-carousel>
+
+      <!--  tabs栏 开始 -->
+      <div class="index_tabs">
+        <TypesTab/>
+      </div>
+      <!--  tabs栏 结束 -->
     
     </div>
     <!-- 轮播图 结束 -->
@@ -17,6 +23,7 @@
 </template>
 
 <script>
+import TypesTab from "@/components/index/TypesTab";
 export default {
   data(){
     return{
@@ -31,9 +38,22 @@ export default {
       // console.log(res);
       this.swiperList=res.data.data;
     })
+  },
+  components:{
+    TypesTab
   }
 };
 </script>
 
-<style>
+<style  lang="less" scoped  >
+.index_carousel{
+  position: relative;
+  .index_tabs{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1000;
+  }
+}
 </style>
