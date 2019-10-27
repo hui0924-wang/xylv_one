@@ -54,6 +54,9 @@ export default {
 </script>
 
 <style  lang="less" scoped  >
+.xyly_index{
+  min-width: 1000px;
+}
 .index_carousel {
   position: relative;
   .index_tabs {

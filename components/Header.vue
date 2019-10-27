@@ -35,7 +35,7 @@
             <el-dropdown-item>黄金糕</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <nuxt-link class="login_link"  to="/"> 登录 / 注册 </nuxt-link>
+        <nuxt-link class="login_link"  to="/user/login"> 登录 / 注册 </nuxt-link>
       </div>
     </div>
   </div>
