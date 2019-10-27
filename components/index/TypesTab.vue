@@ -1,7 +1,7 @@
 <template>
   <div class="types_tab">
     <div class="types_tab_title">
-      <div class="title_item" :class="index===currentIndex?'active':''"  v-for="(item,index) in titles" :key="index" >
+      <div  @click="titleChange(index)" class="title_item" :class="index===currentIndex?'active':''"  v-for="(item,index) in titles" :key="index" >
         {{item.text}}
       </div>
     </div>
@@ -22,6 +22,15 @@ export default {
       ],
       currentIndex:0
     };
+  },
+  methods: {
+    titleChange(index){
+      this.currentIndex=index;
+
+      if(index===2){
+        this.$router.push("/air");
+      }
+    }
   }
 };
 </script>
@@ -40,6 +49,8 @@ export default {
     align-items: center;
     background-color: rgba(0,0,0,.5);
     color: #fff;
+    transform: skewX(19deg);
+    margin-left: 15px;
   }
   .active{
     background-color: #eeeeee;
@@ -57,6 +68,8 @@ export default {
     outline: none;
     font-size: 16px;
     text-indent: 15px;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
   }
 }
 </style>
