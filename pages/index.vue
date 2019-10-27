@@ -1,19 +1,39 @@
 <template>
-  <div>
-    <nuxt-link to="/" >首页</nuxt-link>
-    <nuxt-link to="/post" >攻略</nuxt-link>
-    <nuxt-link to="/hotel" >酒店</nuxt-link>
-    <nuxt-link to="/user/login" >用户</nuxt-link>
-    <i class="iconfont iconpinglun"></i> 
+  <div class="xyly_index">
+    <!-- 轮播图 开始 -->
+    <div class="index_carousel">
+      <el-carousel  height="700px">
+        <el-carousel-item
+          v-for="(item,index) in swiperList"
+          :key="index"
+        >
+          <div  :style="`background:url(${$axios.defaults.baseURL+item.url}) center center  ;height:700px;`" >  </div>
+        </el-carousel-item>
+      </el-carousel>
+    
+    </div>
+    <!-- 轮播图 结束 -->
   </div>
 </template>
 
 <script>
 export default {
-
-}
+  data(){
+    return{
+      swiperList:[]
+    }
+  },
+  // asyncData 
+  mounted(){
+    // 获取首页 轮播图 数据
+    this.$axios.get("/scenics/banners")
+    .then(res=>{
+      // console.log(res);
+      this.swiperList=res.data.data;
+    })
+  }
+};
 </script>
 
 <style>
-
 </style>
