@@ -26,7 +26,17 @@
           to="/air"
         >国内机票</nuxt-link>
       </div>
-      <div class="main_login"> 登录 / 注册</div>
+      <div class="main_login">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+          <i class="el-icon-bell"></i> 消息 <i class="el-icon-caret-bottom"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>黄金糕</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <nuxt-link class="login_link"  to="/"> 登录 / 注册 </nuxt-link>
+      </div>
     </div>
   </div>
 </template>
@@ -87,11 +97,21 @@ export default {};
       align-items: center;
       img {
         width: 156px;
-   
       }
     }
   }
   .main_login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .login_link{
+      font-size: 13px;
+      color: #666;
+      margin-left: 15px;
+      &:hover{
+        color: #0094ff;
+      }
+    }
   }
 }
 </style>
