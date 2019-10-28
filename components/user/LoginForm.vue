@@ -1,19 +1,22 @@
 <template>
   <div class="login_form">
-        <el-form
+    <h1>
+{{token}}
+    </h1>
+    <el-form
       label-position="top"
       label-width="80px"
       :model="form"
       ref="form"
     >
-      <el-form-item >
+      <el-form-item>
         <el-input
           placeholder="用户名/手机"
           v-model="form.username"
         ></el-input>
       </el-form-item>
-     
-      <el-form-item >
+
+      <el-form-item>
         <el-input
           placeholder="密码"
           v-model="form.password"
@@ -34,29 +37,34 @@
 export default {
   data() {
     return {
-      form:{
-        username:"13800138000",
-        password:"13800138000"
+      form: {
+        username: "13800138000",
+        password: "13800138000"
       }
+    };
+  },
+  computed: {
+    token(){
+      return  this.$store.state.user.userinfo.token
     }
   },
   methods: {
-    submitLogin(){
+    submitLogin() {
       //  console.log('%c'+'开心就好',"color:red;font-size:100px;background-image:linear-gradient(to right,#0094ff,pink)");
-
-    this.$axios.post("/accounts/login",this.form)
-    .then(res=>{
       /* 
       1 把token 和 用户信息 都存起来 
         1 vuex 中 
         2 存到 本地存储中 
        */
-    })
+      this.$store.dispatch("user/setUser",this.form)
+      .then(res=>{
+        // 1 弹出提示 
+        // 2 跳转页面 
+      })
     }
   }
-}
+};
 </script>
 
 <style>
-
 </style>
