@@ -40,6 +40,7 @@
           <el-button
             style="width: 100%;"
             type="primary"
+            @click="handleGetTicket"
           >搜索</el-button>
 
         </el-form-item>
@@ -55,16 +56,15 @@ export default {
       currentIndex: 0,
       form: {
         //  出发城市
-        departCity: "",
+        departCity: "广州市",
         // 出发城市 编码
-        departCode: "",
+        departCode: "CAN",
         // 到达城市
-        destCity: "",
+        destCity: "上海市",
         // 到达城市 编码
-        destCode: "",
+        destCode: "SHA",
         // 出发时间
-        departDate: "",
-        func:()=>{}
+        departDate: "2019-11-28"
       }
     };
   },
@@ -112,6 +112,11 @@ export default {
       [this.form.destCity,this.form.destCode,this.form.departCity,this.form.departCode];
       
 
+    },
+    // 4 点击搜索
+    handleGetTicket(){
+      // 要做一个表单验证 
+      this.$router.push({path:"/air/flights",query:this.form});
     }
     
   }
