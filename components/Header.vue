@@ -55,7 +55,7 @@
               </div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>个人中心</el-dropdown-item>
-                <el-dropdown-item>退出</el-dropdown-item>
+                <el-dropdown-item  ><div @click="handleLogout">退出</div></el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -74,6 +74,29 @@ export default {
   computed: {
     userinfo() {
       return this.$store.state.user.userinfo;
+    }
+  },
+  mounted(){
+
+    let userStr=localStorage.getItem("userinfo");
+    if(userStr){
+      // 存在 
+      let userinfo=JSON.parse(userStr);
+      // 把值设置到vuex
+      this.$store.commit("user/setUser",userinfo);
+    }
+  },
+  methods:{
+    handleLogout(){
+      // 1 删除 vuex中的用户信息
+      // 2 删除本地存储的数据
+      this.$store.commit("user/setUser",{ token: "", user: {}});
+      localStorage.removeItem("userinfo");
+      this.$message.success("退出成功");
+      setTimeout(() => {
+        this.$router.push("/user/login/0");
+
+      }, 1000);
     }
   }
 };

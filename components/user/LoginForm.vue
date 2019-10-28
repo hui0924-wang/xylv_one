@@ -53,6 +53,11 @@ export default {
       this.$store.dispatch("user/setUser", this.form).then(res => {
         // 1 弹出提示
         // 2 跳转页面
+        this.$message.success("登录成功");
+        setTimeout(() => {
+          this.$router.push("/");
+
+        }, 1000);
       });
     }
   }

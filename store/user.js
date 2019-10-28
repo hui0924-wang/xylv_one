@@ -20,6 +20,8 @@ export const actions={
     this.$axios.post("/accounts/login",form)
     .then(res=>{
       context.commit("setUser",res.data);
+      // 把 用户信息 存入 本地存储中
+      localStorage.setItem("userinfo",JSON.stringify(res.data));
     })
   }
 }
