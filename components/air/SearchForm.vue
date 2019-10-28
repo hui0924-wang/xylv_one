@@ -11,21 +11,21 @@
     <div class="search_content">
       <el-form label-width="80px">
         <el-form-item label="出发城市">
-         <el-autocomplete
-  :fetch-suggestions="querySearchAsync"
-  @select="handleSelect1"
-  v-model="form.departCity"
-></el-autocomplete>
+          <el-autocomplete
+            :fetch-suggestions="querySearchAsync"
+            @select="handleSelect1"
+            v-model="form.departCity"
+          > </el-autocomplete>
         </el-form-item>
         <!-- 换 -->
-        <div class="city_change">换</div>
+        <div class="city_change"  @click="handleCityChange" >换</div>
         <!-- 换 -->
         <el-form-item label="到达城市">
-                   <el-autocomplete
-  :fetch-suggestions="querySearchAsync"
-  @select="handleSelect2"
-  v-model="form.destCity"
-></el-autocomplete>
+          <el-autocomplete
+            :fetch-suggestions="querySearchAsync"
+            @select="handleSelect2"
+            v-model="form.destCity"
+          ></el-autocomplete>
         </el-form-item>
         <el-form-item label="出发时间">
           <el-date-picker
@@ -63,34 +63,57 @@ export default {
         // 到达城市 编码
         destCode: "",
         // 出发时间
-        departDate: ""
+        departDate: "",
+        func:()=>{}
       }
     };
   },
   methods: {
-      querySearchAsync(queryString, callback) {
-            // 1 queryString  =  当前输入框的值 
-            // 2 把关键字 “广”  发送请求 
-            // callback();
-            // console.log(queryString);
-            if(queryString){
-              this.$axios.get("/airs/city",{params:{name:queryString}})
-              .then(res=>{
-                console.log(res);
-                let cityArr=res.data.data;
-                cityArr.forEach(v=>{
-                  v.value=v.name;
-                });
-                callback(cityArr);
-              })
-            }
-      },
-      handleSelect1(item) {
-        this.form.departCode=item.sort;
-      },
-      handleSelect2(item) {
-        this.form.destCode=item.sort;
+    // 1 搜索建议的输入 事件
+    querySearchAsync(queryString, callback) {
+      // 1 queryString  =  当前输入框的值
+      // 2 把关键字 “广”  发送请求
+      // callback();
+      // console.log(queryString);
+      if (queryString) {
+        this.$axios
+          .get("/airs/city", { params: { name: queryString } })
+          .then(res => {
+            console.log(res);
+            let cityArr = res.data.data;
+            cityArr.forEach(v => {
+              v.value = v.name;
+            });
+            callback(cityArr);
+          });
       }
+    },
+    // 2 点击  出发城市
+    handleSelect1(item) {
+      this.form.departCode = item.sort;
+    },
+    // 2 点击 到达城市
+    handleSelect2(item) {
+      this.form.destCode = item.sort;
+    },
+    // 3 “换”  交换城市和编码
+    handleCityChange(){
+      // 简单的 对象 深拷贝 有小弊端： 对象中如果有 属性 = 函数格式 导致 属性丢失！！！！ 
+      // let form=JSON.parse(JSON.stringify(this.form));
+      // this.form.departCity=form.destCity;
+      // this.form.departCode=form.destCode;
+      // // ================
+      // this.form.destCity=form.departCity;
+      // this.form.destCode=form.departCode;
+
+      // low-----------------------
+      // es6 交换
+      [this.form.departCity,this.form.departCode,this.form.destCity,this.form.destCode]=
+      [this.form.destCity,this.form.destCode,this.form.departCity,this.form.departCode];
+      
+
+    }
+    
   }
 };
 </script>
@@ -139,6 +162,7 @@ export default {
     font-size: 13px;
     right: 11px;
     top: 59px;
+    cursor: pointer;
     &::before {
       content: "";
       width: 30px;
