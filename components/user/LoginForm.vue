@@ -1,8 +1,6 @@
 <template>
   <div class="login_form">
-    <h1>
-{{token}}
-    </h1>
+
     <el-form
       label-position="top"
       label-width="80px"
@@ -43,11 +41,7 @@ export default {
       }
     };
   },
-  computed: {
-    token(){
-      return  this.$store.state.user.userinfo.token
-    }
-  },
+  
   methods: {
     submitLogin() {
       //  console.log('%c'+'开心就好',"color:red;font-size:100px;background-image:linear-gradient(to right,#0094ff,pink)");
@@ -56,11 +50,10 @@ export default {
         1 vuex 中 
         2 存到 本地存储中 
        */
-      this.$store.dispatch("user/setUser",this.form)
-      .then(res=>{
-        // 1 弹出提示 
-        // 2 跳转页面 
-      })
+      this.$store.dispatch("user/setUser", this.form).then(res => {
+        // 1 弹出提示
+        // 2 跳转页面
+      });
     }
   }
 };

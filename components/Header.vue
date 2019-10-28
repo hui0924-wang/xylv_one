@@ -29,20 +29,54 @@
       <div class="main_login">
         <el-dropdown>
           <span class="el-dropdown-link">
-          <i class="el-icon-bell"></i> 消息 <i class="el-icon-caret-bottom"></i>
+            <i class="el-icon-bell"></i> 消息 <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
+            <el-dropdown-item>消息</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <nuxt-link class="login_link"  to="/user/login"> 登录 / 注册 </nuxt-link>
+        <nuxt-link
+          class="login_link"
+          to="/user/login"
+        >
+
+          <div
+            v-if="userinfo.token"
+            class="login_user"
+          >
+            <el-dropdown>
+              <div class="el-dropdown-link">
+                <img
+                  :src="$axios.defaults.baseURL+userinfo.user.defaultAvatar"
+                  alt=""
+                >
+                <span>{{userinfo.user.nickname}}</span>
+                <i class="el-icon-caret-bottom"></i>
+              </div>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>个人中心</el-dropdown-item>
+                <el-dropdown-item>退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+          <div
+            v-else
+            class="login_text"
+          >登录 / 注册</div>
+        </nuxt-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    userinfo() {
+      return this.$store.state.user.userinfo;
+    }
+  }
+};
 </script>
 
 <style lang="less"  scoped>
@@ -104,14 +138,24 @@ export default {};
     display: flex;
     align-items: center;
     justify-content: center;
-    .login_link{
+    .login_link {
       font-size: 13px;
       color: #666;
       margin-left: 15px;
-      &:hover{
+      &:hover {
         color: #0094ff;
       }
     }
+  }
+}
+
+.login_user {
+  .el-dropdown-link {
+    img {
+      width: 36px;
+    }
+    display: flex;
+    align-items: center;
   }
 }
 </style>
