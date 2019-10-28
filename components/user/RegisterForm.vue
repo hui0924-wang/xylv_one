@@ -119,7 +119,6 @@ export default {
 
             this.$message.success("注册成功");
             setTimeout(() => {
-              
               this.$router.push("/user/login/0");
             }, 1000);
           });
@@ -135,6 +134,6 @@ export default {
 
 <style>
 .register_form {
-  padding: 20px;
+ 
 }
 </style>

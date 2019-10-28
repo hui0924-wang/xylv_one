@@ -80,4 +80,7 @@ export default {
     }
   }
 }
+.login_main_content{
+  padding: 20px;
+}
 </style>
