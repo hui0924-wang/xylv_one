@@ -10,27 +10,37 @@
     </div>
     <div class="search_content">
       <el-form label-width="80px">
-        <el-form-item label="活动名称">
-          <el-autocomplete placeholder="请输入内容"></el-autocomplete>
+        <el-form-item label="出发城市">
+         <el-autocomplete
+  :fetch-suggestions="querySearchAsync"
+  @select="handleSelect1"
+  v-model="form.departCity"
+></el-autocomplete>
         </el-form-item>
         <!-- 换 -->
         <div class="city_change">换</div>
         <!-- 换 -->
-        <el-form-item label="活动名称">
-          <el-autocomplete placeholder="请输入内容"></el-autocomplete>
+        <el-form-item label="到达城市">
+                   <el-autocomplete
+  :fetch-suggestions="querySearchAsync"
+  @select="handleSelect2"
+  v-model="form.destCity"
+></el-autocomplete>
         </el-form-item>
-        <el-form-item label="活动时间">
+        <el-form-item label="出发时间">
           <el-date-picker
             type="date"
             placeholder="选择日期"
             style="width: 100%;"
+            v-model="form.departDate"
+            value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button
             style="width: 100%;"
             type="primary"
-          >立即创建</el-button>
+          >搜索</el-button>
 
         </el-form-item>
       </el-form>
@@ -42,8 +52,45 @@
 export default {
   data() {
     return {
-      currentIndex: 0
+      currentIndex: 0,
+      form: {
+        //  出发城市
+        departCity: "",
+        // 出发城市 编码
+        departCode: "",
+        // 到达城市
+        destCity: "",
+        // 到达城市 编码
+        destCode: "",
+        // 出发时间
+        departDate: ""
+      }
     };
+  },
+  methods: {
+      querySearchAsync(queryString, callback) {
+            // 1 queryString  =  当前输入框的值 
+            // 2 把关键字 “广”  发送请求 
+            // callback();
+            // console.log(queryString);
+            if(queryString){
+              this.$axios.get("/airs/city",{params:{name:queryString}})
+              .then(res=>{
+                console.log(res);
+                let cityArr=res.data.data;
+                cityArr.forEach(v=>{
+                  v.value=v.name;
+                });
+                callback(cityArr);
+              })
+            }
+      },
+      handleSelect1(item) {
+        this.form.departCode=item.sort;
+      },
+      handleSelect2(item) {
+        this.form.destCode=item.sort;
+      }
   }
 };
 </script>
