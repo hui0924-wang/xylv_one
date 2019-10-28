@@ -4,15 +4,15 @@
       <div class="login_main_title">
         <div
           class="title_item"
-          :class="currentIndex===index?'active':''"
-          @click="currentIndex=index"
+          :class="currentIndex==index?'active':''"
+          @click="$router.push('/user/login/'+index)"
           v-for="(item,index) in ['登录','注册']"
           :key="index"
         >{{item}}</div>
       </div>
       <div class="login_main_content">
         <!-- 登录组件 -->
-        <div v-if="currentIndex===0"> <LoginForm/> </div>
+        <div v-if="currentIndex==0"> <LoginForm/> </div>
         <!-- 注册组件 -->
         <div v-else> <RegisterForm/> </div>
       </div>
@@ -28,7 +28,7 @@ import RegisterForm from "@/components/user/RegisterForm";
 export default {
   data() {
     return {
-      currentIndex:1
+      currentIndex:this.$route.params.id
     };
   },
   components: {

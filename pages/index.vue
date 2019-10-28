@@ -10,7 +10,6 @@
           <div :style="`background:url(${$axios.defaults.baseURL+item.url}) center center  ;height:700px;`"> </div>
         </el-carousel-item>
       </el-carousel>
-
       <!--  tabs栏 开始 -->
       <div class="index_tabs">
         <TypesTab />

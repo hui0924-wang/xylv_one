@@ -93,13 +93,9 @@ export default {
       let reg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
 
       if (reg.test(this.form.username)) {
-        this.$axios
-          .get("/captchas", {
-            params: { tel: this.form.username }
-          })
-          .then(res => {
-            // console.log(res);
-          });
+        this.$axios.post("/captchas", { tel: this.form.username }).then(res => {
+          // console.log(res);
+        });
       } else {
         this.$message.warning("手机号码不合法");
       }
@@ -108,15 +104,25 @@ export default {
     submitForm() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          // 1 构造表单 发送异步请求 
+          // 1 构造表单 发送异步请求
           // 2 删除对象的一个属性
           // delete this.form['password2'];
           // 3 resForm 等于  this.form 对象中  除了 password2 属性外的剩下的 属性集合 = 对象
           // jwt  成功后的 跳转 明天再来！
-          let {password2,...resForm}=this.form;
+          let { password2, ...resForm } = this.form;
           console.log(resForm);
-          this.$axios.post("/accounts/register",resForm)
-          .then(res=>console.log(res))
+          this.$axios.post("/accounts/register", resForm).then(res => {
+            // 4 跳转到 登录页面
+            // 4.1  子向父传参  来跳转
+            // 4.2  currentIndex 和 路由上的参数产生关联就可以了
+            //  1 nuxt 中路由的知识 （关于如何创建页面 ）
+
+            this.$message.success("注册成功");
+            setTimeout(() => {
+              
+              this.$router.push("/user/login/0");
+            }, 1000);
+          });
         } else {
           console.log("输入不合法");
           return false;
