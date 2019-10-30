@@ -1,54 +1,69 @@
 <template>
   <div class="flights_item">
     <div class="item_main">
-      <div class="item_name">上航FM9316</div>
+      <div class="item_name">{{data.airline_name}}{{data.flight_no}}</div>
       <div class="item_depart_date">
-        <p>19:30</p>
-        <p>白云机场T1</p>
+        <p>{{data.dep_time}}</p>
+        <p>{{data.org_airport_name}}{{data.org_airport_quay}}</p>
       </div>
-      <div class="duration">2时20分</div>
+      <div class="duration">{{duration}}</div>
       <div class="item_dest_date">
-        <p>19:30</p>
-        <p>白云机场T1</p>
+        <p>{{data.arr_time}}</p>
+        <p>{{data.dst_airport_name}}{{data.dst_airport_quay}}</p>
       </div>
       <div class="item_price">
-        <p>￥<span>800</span>起</p>
+        <p>￥<span>{{data.base_price*0.3}}</span>起</p>
       </div>
     </div>
     <div class="item_info">
       <div class="item_low">低价推荐</div>
       <div class="item_seat">
-        <div class="seat_row">
+        <!-- 循环来 显示  -->
+        <div class="seat_row" v-for="(item,index) in data.seat_infos" :key="index" >
           <div class="seat_row_name">
-            <span>经济舱 </span> | 上海一诺千金航空服务有限公司
+            <span>{{item.name}} </span> | {{item.supplierName}}
           </div>
-          <div class="seat_row_price">$1999</div>
+          <div class="seat_row_price">￥{{item.settle_price}}</div>
           <div class="seat_row_btns">
             <div>
               <el-button type="warning"  size="mini" >选定</el-button>
-              <p>剩余:99</p>
+              <p>剩余{{item.discount}}</p>
             </div>
           </div>
         </div>
-        <div class="seat_row">
-          <div class="seat_row_name">
-            <span>经济舱 </span> | 上海一诺千金航空服务有限公司
-          </div>
-          <div class="seat_row_price">$1999</div>
-          <div class="seat_row_btns">
-            <div>
-              <el-button type="warning"  size="mini" >选定</el-button>
-              <p>剩余:99</p>
-            </div>
-          </div>
-        </div>
+      
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props:{
+    data:{
+      type:Object,
+      default:{}
+    }
+  },
+  computed:{
+    duration(){
+    let startTime = this.data.dep_datetime;
+    let endTime = this.data.arr_datetime;
+    let startDate = new Date(startTime);
+    let endDate = new Date(endTime);
+
+    let duration = endDate - startDate;
+
+
+    let hour=parseInt(duration/1000/60/60);
+  
+    let minutes=duration/1000/60-hour*60;
+
+
+      return `${hour}时${minutes}分`
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>

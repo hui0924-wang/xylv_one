@@ -3,7 +3,7 @@
     <!-- 正文 开始 -->
     <div class="flights_main">
       <!-- 1 筛选模块 开始 -->
-      <FlightsFilter />
+      <FlightsFilter v-if="false" />
       <!-- 1 筛选模块 结束 -->
 
       <!-- 2 表单的头部 开始 -->
@@ -12,8 +12,7 @@
 
       <!-- 3 机票列表 开始 -->
       <div class="air_list">
-        <FlightsItem/>
-        <FlightsItem/>
+        <FlightsItem v-for="(item) in flightsData.flights" :key="item.id"  :data="item"   />
       </div>
       <!-- 3 机票列表 结束 -->
     </div>
@@ -33,6 +32,30 @@ import FlightsItem from "@/components/air/FlightsItem";
 export default {
   components: {
     FlightsFilter,FlightsHead,FlightsItem
+  },
+  data() {
+    return {
+      flightsData:{
+        // 机票列表数组
+        flights:[],
+        info:{},
+        options:{}
+      }
+    }
+  },
+  methods: {
+    // 1 获取机票数据 
+    getList(){
+      let form=this.$route.query;
+      this.$axios.get("/airs",{params:form})
+      .then(res=>{
+        // console.log(res);
+        this.flightsData=res.data;
+      })
+    }
+  },
+  mounted () {
+    this.getList();
   }
 };
 </script>
