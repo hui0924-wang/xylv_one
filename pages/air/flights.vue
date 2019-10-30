@@ -3,7 +3,7 @@
     <!-- 正文 开始 -->
     <div class="flights_main">
       <!-- 1 筛选模块 开始 -->
-      <FlightsFilter v-if="false" />
+      <FlightsFilter   v-if="flightsData.flights.length" :info="flightsData.info" :options="flightsData.options"  />
       <!-- 1 筛选模块 结束 -->
 
       <!-- 2 表单的头部 开始 -->
@@ -80,7 +80,7 @@ export default {
         // 页容量数组
         pageSizes: [1, 2, 5, 10, 20, 100],
         // 页容量
-        pageSize: 1,
+        pageSize: 10,
         // 总条数
         total: 1
       }
