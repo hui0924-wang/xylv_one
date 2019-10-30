@@ -13,6 +13,7 @@
       <!-- 3 机票列表 开始 -->
       <div class="air_list">
         <FlightsItem/>
+        <FlightsItem/>
       </div>
       <!-- 3 机票列表 结束 -->
     </div>
