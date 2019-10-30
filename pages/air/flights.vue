@@ -3,7 +3,12 @@
     <!-- 正文 开始 -->
     <div class="flights_main">
       <!-- 1 筛选模块 开始 -->
-      <FlightsFilter   v-if="flightsData.flights.length" :info="flightsData.info" :options="flightsData.options"  />
+      <FlightsFilter
+        v-if="flightsData.flights.length"
+        :info="flightsData.info"
+        :options="flightsData.options"
+        @filterChange="filterChange"
+      />
       <!-- 1 筛选模块 结束 -->
 
       <!-- 2 表单的头部 开始 -->
@@ -70,6 +75,9 @@ export default {
         options: {}
       },
 
+      // 筛选后的数据源 第一次加载页面的时候  值 === 总的数据源
+      filterList: [],
+
       // 被分页后的 机票列表
       currentFlights: [],
 
@@ -88,56 +96,64 @@ export default {
   },
   methods: {
     // 1 获取机票数据
-    getList() {
-      let form = this.$route.query;
-      this.$axios.get("/airs", { params: form }).then(res => {
-        // console.log(res);
-        this.flightsData = res.data;
-        this.page.total= this.flightsData.total;
-        // 需要实现 数组分页  this.flightsData.flights
-        // 记公式
-        // let list =totalList.slice()  使用它
-        // let list =totalList.slice(
-        // (当前的页码-1)*当前的页容量 ),
-        // 当前的页码* 当前的页容量
-        // )
-        // this.currentFlights = this.flightsData.flights.slice(
-        //   (this.page.currentPage - 1) * this.page.pageSize, // 0
-        //   this.page.currentPage * this.page.pageSize // 2
-        // );
-        
-        
-        this.currentFlights = this.flightsData.flights.slice(
-          // 页码 2  页容量 是 10  第二页 
-          // 第10条开始  20
+    getList(isFirst) {
+      if (isFirst) {
+        let form = this.$route.query;
+        this.$axios.get("/airs", { params: form }).then(res => {
+          this.flightsData = res.data;
+          this.page.total = this.flightsData.total;
+          this.filterList = this.flightsData.flights;
+          this.page.total = this.filterList.length;
+          this.currentFlights = this.filterList.slice(
+            (this.page.currentPage - 1) * this.page.pageSize, // 0
+            this.page.currentPage * this.page.pageSize // 2
+          );
+        });
+      } else {
+        this.page.total = this.filterList.length;
+        this.currentFlights = this.filterList.slice(
           (this.page.currentPage - 1) * this.page.pageSize, // 0
-          // 20 
           this.page.currentPage * this.page.pageSize // 2
         );
-      });
+      }
     },
-    // 2 页容量改变事件
     handleSizeChange(value) {
-      // 选择 页容量
-      // console.log(value);
       this.page.pageSize = value;
-      this.currentFlights = this.flightsData.flights.slice(
-        (this.page.currentPage - 1) * this.page.pageSize, // 0
-        this.page.currentPage * this.page.pageSize // 2
-      );
+      this.getList();
     },
-    // 3 当前页码改变事件
     handleCurrentChange(value) {
-      // 选择后的当前页码
       this.page.currentPage = value;
-      this.currentFlights = this.flightsData.flights.slice(
-        (this.page.currentPage - 1) * this.page.pageSize, // 0
-        this.page.currentPage * this.page.pageSize // 2
-      );
+      this.getList();
+    },
+    filterChange(filterObj) {
+      // {airport: "首都机场", flightTimes: "6|12", company: "国航", sizes: "M"}
+      // {airport: "", flightTimes: "", company: "国航", sizes: ""}
+
+      // 1 先过滤 第一个条件 航空公司
+      // 2 当 航空公司 等于 空字符串的时候 表示 不用过滤
+      let filterList = this.flightsData.flights.filter(v => {
+        // company == "";
+        // if (filterObj.company === "") {
+        //   return true;
+        // }
+
+        // 1 航空公司的条件
+        let isOk1 =
+          filterObj.company === "" || v.airline_name === filterObj.company;
+
+        return isOk1;
+        // if (isOk1) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+      });
+      this.filterList = filterList;
+      this.getList();
     }
   },
   mounted() {
-    this.getList();
+    this.getList(true);
   }
 };
 </script>

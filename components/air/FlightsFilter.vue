@@ -5,6 +5,7 @@
       <div class="main_selects">
         <div class="select_item">
           <el-select
+            @change="filterChange"
             placeholder="起飞机场"
             size="mini"
             v-model="airport"
@@ -19,6 +20,7 @@
         </div>
         <div class="select_item">
           <el-select
+            @change="filterChange"
             placeholder="起飞时间"
             size="mini"
             v-model="flightTimes"
@@ -33,6 +35,7 @@
         </div>
         <div class="select_item">
           <el-select
+            @change="filterChange"
             placeholder="航空公司"
             size="mini"
             v-model="company"
@@ -47,6 +50,7 @@
         </div>
         <div class="select_item">
           <el-select
+            @change="filterChange"
             placeholder="请选择"
             size="mini"
             v-model="sizes"
@@ -87,46 +91,61 @@ export default {
   computed: {
     // airport(){},
     filterOptions() {
-      // 起飞机场 
+      // 起飞机场
       // let airport=this.options.airport.filter(v=>v).map(v=>({value:v,label:v}));
-      let airport=[];
+      let airport = [];
       this.options.airport.forEach(v => {
-          v&&airport.push({value:v,label:v});
+        v && airport.push({ value: v, label: v });
       });
 
-      // 起飞时间 
-      let flightTimes=this.options.flightTimes.map(v=>({
-        label:`${v.from}:00 - ${v.to}:00`,
-        value:v.from+"|"+v.to   // 6|10
+      // 起飞时间
+      let flightTimes = this.options.flightTimes.map(v => ({
+        label: `${v.from}:00 - ${v.to}:00`,
+        value: v.from + "|" + v.to // 6|10
         // value:v
       }));
 
       // 航空公司
-      let company=this.options.company.map(v=>({value:v,label:v}));
+      let company = this.options.company.map(v => ({ value: v, label: v }));
 
       // 机型
-      let sizes=[{value:"L",label:"大"},{value:"M",label:"中"},{value:"S",label:"小"},]
-      
-      return {airport,flightTimes,company,sizes};
+      let sizes = [
+        { value: "L", label: "大" },
+        { value: "M", label: "中" },
+        { value: "S", label: "小" }
+      ];
+
+      return { airport, flightTimes, company, sizes };
     }
   },
   methods: {
-    handleClick(){
-      console.log(this.airport,this.flightTimes,this.company,this.sizes);
-
+    handleClick() {
+      // console.log(this.airport,this.flightTimes,this.company,this.sizes);
+    },
+    // 下拉框值改变事件
+    filterChange() {
+      // 把选中的值 发送到父组件中即可
+      // console.log(this.airport,this.flightTimes,this.company,this.sizes)
+      let filter = {
+        airport: this.airport,
+        flightTimes: this.flightTimes,
+        company: this.company,
+        sizes: this.sizes
+      };
+      this.$emit("filterChange", filter);
     }
   },
   data() {
     return {
-      // 起飞机场默认值 
-      airport:"",
+      // 起飞机场默认值
+      airport: "",
       // 起飞时间
-      flightTimes:"",
+      flightTimes: "",
       // 航空公司
-      company:"",
+      company: "",
       // 机型
-      sizes:""
-    }
+      sizes: ""
+    };
   }
 
   // airport:["首都机场"]
