@@ -100,17 +100,22 @@ export default {
       if (isFirst) {
         let form = this.$route.query;
         this.$axios.get("/airs", { params: form }).then(res => {
+          // 定义 所有的数据源
           this.flightsData = res.data;
-          this.page.total = this.flightsData.total;
+          // 定义 过滤后 数组 数据源 
           this.filterList = this.flightsData.flights;
+          // 定义 总条数
           this.page.total = this.filterList.length;
+          // 分页使用 
           this.currentFlights = this.filterList.slice(
             (this.page.currentPage - 1) * this.page.pageSize, // 0
             this.page.currentPage * this.page.pageSize // 2
           );
         });
       } else {
+        // 定义总条数 （属于过滤后的 总条数）
         this.page.total = this.filterList.length;
+        // 分页
         this.currentFlights = this.filterList.slice(
           (this.page.currentPage - 1) * this.page.pageSize, // 0
           this.page.currentPage * this.page.pageSize // 2

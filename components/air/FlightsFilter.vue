@@ -97,17 +97,14 @@ export default {
       this.options.airport.forEach(v => {
         v && airport.push({ value: v, label: v });
       });
-
       // 起飞时间
       let flightTimes = this.options.flightTimes.map(v => ({
         label: `${v.from}:00 - ${v.to}:00`,
         value: v.from + "|" + v.to // 6|10
         // value:v
       }));
-
       // 航空公司
       let company = this.options.company.map(v => ({ value: v, label: v }));
-
       // 机型
       let sizes = [
         { value: "L", label: "大" },
