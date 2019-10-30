@@ -1,7 +1,7 @@
 <template>
   <div class="flights_item">
     <div @click="isShow=!isShow" class="item_main">
-      <div class="item_name">{{data.airline_name}}{{data.flight_no}}</div>
+      <div class="item_name">{{data.airline_name}}{{data.flight_no}} --{{data.plane_size}} </div>
       <div class="item_depart_date">
         <p>{{data.dep_time}}</p>
         <p>{{data.org_airport_name}}{{data.org_airport_quay}}</p>

@@ -18,43 +18,46 @@
           </el-select>
         </div>
         <div class="select_item">
-          <!-- <el-select
-            placeholder="请选择"
+          <el-select
+            placeholder="起飞时间"
             size="mini"
+            v-model="flightTimes"
           >
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in  filterOptions.flightTimes "
               :key="item.value"
               :label="item.label"
               :value="item.value"
             > </el-option>
-          </el-select> -->
+          </el-select>
         </div>
         <div class="select_item">
-          <!-- <el-select
-            placeholder="请选择"
+          <el-select
+            placeholder="航空公司"
             size="mini"
+            v-model="company"
           >
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in  filterOptions.company"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             > </el-option>
-          </el-select> -->
+          </el-select>
         </div>
         <div class="select_item">
-          <!-- <el-select
+          <el-select
             placeholder="请选择"
             size="mini"
+            v-model="sizes"
           >
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in   filterOptions.sizes "
               :key="item.value"
               :label="item.label"
               :value="item.value"
             > </el-option>
-          </el-select> -->
+          </el-select>
         </div>
       </div>
     </div>
@@ -63,6 +66,7 @@
         type="primary"
         round
         size="mini"
+        @click="handleClick"
       >撤销</el-button>
     </div>
   </div>
@@ -83,21 +87,45 @@ export default {
   computed: {
     // airport(){},
     filterOptions() {
-      // 机场 
+      // 起飞机场 
       // let airport=this.options.airport.filter(v=>v).map(v=>({value:v,label:v}));
       let airport=[];
       this.options.airport.forEach(v => {
           v&&airport.push({value:v,label:v});
       });
-      // console.log(this.options);
-      // let airport=this.options.airport.map(v=>({value:v,label:v}));
+
+      // 起飞时间 
+      let flightTimes=this.options.flightTimes.map(v=>({
+        label:`${v.from}:00 - ${v.to}:00`,
+        value:v.from+"|"+v.to   // 6|10
+        // value:v
+      }));
+
+      // 航空公司
+      let company=this.options.company.map(v=>({value:v,label:v}));
+
+      // 机型
+      let sizes=[{value:"L",label:"大"},{value:"M",label:"中"},{value:"S",label:"小"},]
       
-      return {airport};
+      return {airport,flightTimes,company,sizes};
+    }
+  },
+  methods: {
+    handleClick(){
+      console.log(this.airport,this.flightTimes,this.company,this.sizes);
+
     }
   },
   data() {
     return {
-      airport:""
+      // 起飞机场默认值 
+      airport:"",
+      // 起飞时间
+      flightTimes:"",
+      // 航空公司
+      company:"",
+      // 机型
+      sizes:""
     }
   }
 
