@@ -18,7 +18,10 @@
           > </el-autocomplete>
         </el-form-item>
         <!-- 换 -->
-        <div class="city_change"  @click="handleCityChange" >换</div>
+        <div
+          class="city_change"
+          @click="handleCityChange"
+        >换</div>
         <!-- 换 -->
         <el-form-item label="到达城市">
           <el-autocomplete
@@ -82,7 +85,7 @@ export default {
             let cityArr = res.data.data;
             cityArr.forEach(v => {
               // 把 广州市  “市” 移除 因为 后台不需要 “市”
-              v.name=v.name.replace("市","");
+              v.name = v.name.replace("市", "");
               v.value = v.name;
             });
             callback(cityArr);
@@ -98,8 +101,8 @@ export default {
       this.form.destCode = item.sort;
     },
     // 3 “换”  交换城市和编码
-    handleCityChange(){
-      // 简单的 对象 深拷贝 有小弊端： 对象中如果有 属性 = 函数格式 导致 属性丢失！！！！ 
+    handleCityChange() {
+      // 简单的 对象 深拷贝 有小弊端： 对象中如果有 属性 = 函数格式 导致 属性丢失！！！！
       // let form=JSON.parse(JSON.stringify(this.form));
       // this.form.departCity=form.destCity;
       // this.form.departCode=form.destCode;
@@ -109,17 +112,47 @@ export default {
 
       // low-----------------------
       // es6 交换
-      [this.form.departCity,this.form.departCode,this.form.destCity,this.form.destCode]=
-      [this.form.destCity,this.form.destCode,this.form.departCity,this.form.departCode];
-      
-
+      [
+        this.form.departCity,
+        this.form.departCode,
+        this.form.destCity,
+        this.form.destCode
+      ] = [
+        this.form.destCity,
+        this.form.destCode,
+        this.form.departCity,
+        this.form.departCode
+      ];
     },
     // 4 点击搜索
-    handleGetTicket(){
-      // 要做一个表单验证 
-      this.$router.push({path:"/air/flights",query:this.form});
+    handleGetTicket() {
+      // 把当前机票城市信息 存到 本地存贮中
+      // 1 获取 旧的数据 [{dename:"广州},{dename:"上海"}];
+      let cityStr = localStorage.getItem("city");
+      let arr = [];
+      if (cityStr) {
+        arr = JSON.parse(cityStr);
+      }
+
+      // 去重
+      // JSON.stringify(this.form) === JSON.stringify(v)
+      // this.form= {name:"123"}==={name:"123"}
+      const index = arr.findIndex(
+        v => JSON.stringify(this.form) === JSON.stringify(v)
+      );
+      if (index !== -1) {
+        // 找到
+        arr.splice(index, 1);
+      }
+      arr.unshift(this.form);
+
+      // arr.push(this.form)
+
+      localStorage.setItem("city", JSON.stringify(arr));
+
+      // 要做一个表单验证
+      this.$router.push({ path: "/air/flights", query: this.form });
     }
-    
   }
 };
 </script>

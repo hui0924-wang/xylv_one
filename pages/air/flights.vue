@@ -50,7 +50,29 @@
     <!-- 正文 结束 -->
 
     <!-- 侧边栏 开始 -->
-    <div class="flights_aside">2</div>
+    <div class="flights_aside">
+      <div class="history">
+        <div class="history_title">历史搜索</div>
+        <div class="history_content">
+          <div
+            class="history_row"
+            v-for="(item,index) in historyList"
+            :key="index"
+          >
+            <div class="his_left">
+              <p>{{item.departCity}} - {{item.destCity}} </p>
+              <p>{{item.departDate}}</p>
+            </div>
+            <div class="his_right">
+              <el-button
+                size="mini"
+                type="warning"
+              >选择</el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 侧边栏 结束 -->
 
   </div>
@@ -91,7 +113,9 @@ export default {
         pageSize: 10,
         // 总条数
         total: 1
-      }
+      },
+      // 历史 记录
+      historyList: []
     };
   },
   methods: {
@@ -151,17 +175,18 @@ export default {
         let isOk3 = filterObj.sizes === v.plane_size || filterObj.sizes === "";
 
         // 4 起飞时间 只拿完整数据中 起飞时间（dep_time） 和 筛选条件中的 from | to 做比较即可 (6|12)
-        // 1 获取 条件中的 开始时间
-        // 2 格式要注意 字符串的格式 加减运算 
+        // 4.1 获取 条件中的 开始时间
+        // 4.2 格式要注意 字符串的格式 加减运算
         let from = +filterObj.flightTimes.split("|")[0];
         let to = +filterObj.flightTimes.split("|")[1];
 
-        // 2 把 6:30 => 6.5 格式
+        // 4.3 把 6:30 => 6.5 格式
         let hour = +v.dep_time.split(":")[0] + +v.dep_time.split(":")[1] / 60;
 
         // debugger
-        // 3 开始做比较
-        let isOk4 = (filterObj.flightTimes==="")||(hour >= from && hour <= to);
+        // 4.4 开始做比较
+        let isOk4 =
+          filterObj.flightTimes === "" || (hour >= from && hour <= to);
 
         return isOk1 && isOk2 && isOk3 && isOk4;
       });
@@ -171,6 +196,8 @@ export default {
   },
   mounted() {
     this.getList(true);
+
+    this.historyList = JSON.parse(localStorage.getItem("city"));
   }
 };
 </script>
@@ -186,5 +213,43 @@ export default {
 }
 .flights_aside {
   flex: 2;
+}
+.history {
+  border: 1px solid #ccc;
+  padding: 20px;
+  .history_title {
+    font-size: 26px;
+    padding: 20px 0;
+  }
+
+  .history_content {
+    .history_row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+      .his_left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: left;
+        p:nth-child(1) {
+          font-size: 18px;
+        }
+        p:nth-child(2) {
+          color: #666;
+          font-size: 13px;
+        }
+
+      }
+
+      .his_right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
 }
 </style>
