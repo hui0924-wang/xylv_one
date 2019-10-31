@@ -102,11 +102,11 @@ export default {
         this.$axios.get("/airs", { params: form }).then(res => {
           // 定义 所有的数据源
           this.flightsData = res.data;
-          // 定义 过滤后 数组 数据源 
+          // 定义 过滤后 数组 数据源
           this.filterList = this.flightsData.flights;
           // 定义 总条数
           this.page.total = this.filterList.length;
-          // 分页使用 
+          // 分页使用
           this.currentFlights = this.filterList.slice(
             (this.page.currentPage - 1) * this.page.pageSize, // 0
             this.page.currentPage * this.page.pageSize // 2
@@ -134,24 +134,21 @@ export default {
       // {airport: "首都机场", flightTimes: "6|12", company: "国航", sizes: "M"}
       // {airport: "", flightTimes: "", company: "国航", sizes: ""}
 
+      console.log(filterObj);
+
       // 1 先过滤 第一个条件 航空公司
       // 2 当 航空公司 等于 空字符串的时候 表示 不用过滤
       let filterList = this.flightsData.flights.filter(v => {
-        // company == "";
-        // if (filterObj.company === "") {
-        //   return true;
-        // }
-
         // 1 航空公司的条件
-        let isOk1 =
-          filterObj.company === "" || v.airline_name === filterObj.company;
+        let isOk1 = filterObj.company === "" || v.airline_name === filterObj.company;
 
-        return isOk1;
-        // if (isOk1) {
-        //   return true;
-        // } else {
-        //   return false;
-        // }
+
+        // 2 起飞机场 
+        let isOk2=filterObj.airport===v.org_airport_name||filterObj.airport==="";
+       
+
+        return isOk1&&isOk2;
+
       });
       this.filterList = filterList;
       this.getList();
