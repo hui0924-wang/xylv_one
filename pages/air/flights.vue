@@ -142,12 +142,13 @@ export default {
         // 1 航空公司的条件
         let isOk1 = filterObj.company === "" || v.airline_name === filterObj.company;
 
-
         // 2 起飞机场 
         let isOk2=filterObj.airport===v.org_airport_name||filterObj.airport==="";
-       
 
-        return isOk1&&isOk2;
+        // 3 机型 
+        let isOk3=filterObj.sizes===v.plane_size||filterObj.sizes==="";
+        
+        return isOk1&&isOk2&&isOk3;
 
       });
       this.filterList = filterList;
