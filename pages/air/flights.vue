@@ -140,16 +140,30 @@ export default {
       // 2 当 航空公司 等于 空字符串的时候 表示 不用过滤
       let filterList = this.flightsData.flights.filter(v => {
         // 1 航空公司的条件
-        let isOk1 = filterObj.company === "" || v.airline_name === filterObj.company;
+        let isOk1 =
+          filterObj.company === "" || v.airline_name === filterObj.company;
 
-        // 2 起飞机场 
-        let isOk2=filterObj.airport===v.org_airport_name||filterObj.airport==="";
+        // 2 起飞机场
+        let isOk2 =
+          filterObj.airport === v.org_airport_name || filterObj.airport === "";
 
-        // 3 机型 
-        let isOk3=filterObj.sizes===v.plane_size||filterObj.sizes==="";
-        
-        return isOk1&&isOk2&&isOk3;
+        // 3 机型
+        let isOk3 = filterObj.sizes === v.plane_size || filterObj.sizes === "";
 
+        // 4 起飞时间 只拿完整数据中 起飞时间（dep_time） 和 筛选条件中的 from | to 做比较即可 (6|12)
+        // 1 获取 条件中的 开始时间
+        // 2 格式要注意 字符串的格式 加减运算 
+        let from = +filterObj.flightTimes.split("|")[0];
+        let to = +filterObj.flightTimes.split("|")[1];
+
+        // 2 把 6:30 => 6.5 格式
+        let hour = +v.dep_time.split(":")[0] + +v.dep_time.split(":")[1] / 60;
+
+        // debugger
+        // 3 开始做比较
+        let isOk4 = (filterObj.flightTimes==="")||(hour >= from && hour <= to);
+
+        return isOk1 && isOk2 && isOk3 && isOk4;
       });
       this.filterList = filterList;
       this.getList();
