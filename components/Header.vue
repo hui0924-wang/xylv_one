@@ -37,7 +37,7 @@
         </el-dropdown>
         <nuxt-link
           class="login_link"
-          to="/user/login"
+          to="/user/login/0"
         >
 
           <div

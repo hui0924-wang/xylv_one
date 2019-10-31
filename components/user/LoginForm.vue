@@ -51,6 +51,7 @@ export default {
         2 存到 本地存储中 
        */
       this.$store.dispatch("user/setUser", this.form).then(res => {
+        console.log(res);
         // 1 弹出提示
         // 2 跳转页面
         this.$message.success("登录成功");
