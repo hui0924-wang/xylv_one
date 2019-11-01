@@ -8,6 +8,7 @@
         <div class="pay_title">微信支付</div>
         <div class="pay_main">
           <div class="pay_code">
+            <canvas id="canvas"></canvas>
             <!-- 支付的图片 -->
             <p>请使用微信扫一扫</p>
             <p>扫描二维码支付</p>
@@ -26,11 +27,13 @@
 </template>
 
 <script>
+const QRCode = require("qrcode");
+
 export default {
   data() {
     return {
-      order:{}
-    }
+      order: {}
+    };
   },
   mounted() {
     // 发送请求 获取订单的支付状态
@@ -41,14 +44,20 @@ export default {
     const token = this.$store.state.user.userinfo.token;
     // 2 使用get请求 文档谁写的！！！！！
     this.$axios
-      .get(
-        "/airorders/" + this.$route.query.id,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      .get("/airorders/" + this.$route.query.id, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       .then(res => {
         // 2 这个请求 私人的请求 带上token！！！！
         console.log(res);
-        this.order=res.data;
+        this.order = res.data;
+
+        // 3 把支付链接 画出来
+        const canvas = document.getElementById("canvas");
+        QRCode.toCanvas(canvas, res.data.payInfo.code_url, function(error) {
+          if (error) console.error(error);
+          console.log("success!");
+        });
       });
   }
 };
