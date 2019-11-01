@@ -81,6 +81,7 @@
           <el-checkbox
             label="备选项1"
             border
+            @change="handleInsurancesChange(item.id)"
           >{{item.type}}：￥{{item.price}}/份×1最高赔付{{item.compensation}}</el-checkbox>
         </div>
 
@@ -97,7 +98,7 @@
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input v-model="contactPhone" > <template slot="append">发送验证码</template></el-input>
+            <el-input v-model="contactPhone"> <template slot="append">发送验证码</template></el-input>
           </el-form-item>
           <el-form-item label="验证码">
             <el-input v-model="captcha"></el-input>
@@ -131,8 +132,8 @@ export default {
       contactName: "李小四",
       // 联系人电话
       contactPhone: "31231232",
-      // 验证码  
-      captcha:"000000",
+      // 验证码
+      captcha: "000000",
       // 是否需要发票
       invoice: false,
       // 座位id
@@ -148,6 +149,20 @@ export default {
     // 减少乘机人
     handleDecrement(index) {
       this.users.splice(index, 1);
+    },
+    // 保险 复选框 选中事件
+    handleInsurancesChange(id) {
+      //  假如 没有添加 就执行 添加
+      // 假如 已经添加过了 就执行 删除
+      // this.insurances.push(id);
+
+      const index=this.insurances.findIndex(v=>v===id);
+      if(index===-1){
+        // 没有添加过
+        this.insurances.push(id);
+      }else{
+        this.insurances.splice(index,1);
+      }
     }
   }
 };
