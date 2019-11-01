@@ -3,7 +3,10 @@
     <!-- 1 乘机人 -->
     <div class="fly_people">
       <!-- 计算属性 没有在当前组件中 使用 就相当于 vue不会帮我们执行 计算的代码  -->
-      <input type="hidden" :value="price" />
+      <input
+        type="hidden"
+        :value="price"
+      />
       <div class="fly_people_title">乘机人 </div>
       <div class="fly_people_content">
         <el-form
@@ -100,14 +103,19 @@
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input v-model="contactPhone"> <template slot="append">发送验证码</template></el-input>
+            <el-input v-model="contactPhone"> <template slot="append">
+                <div @click="handleSendCaptcha">发送验证码</div>
+              </template></el-input>
           </el-form-item>
           <el-form-item label="验证码">
             <el-input v-model="captcha"></el-input>
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary">立即创建</el-button>
+            <el-button
+              type="primary"
+              @click="handleSubmit"
+            >提交订单</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -165,8 +173,33 @@ export default {
       } else {
         this.insurances.splice(index, 1);
       }
-
-      // 根据  this.insurances 里面的id 再去找 保险的价格
+    },
+    // 发送验证码
+    handleSendCaptcha() {
+      this.$axios.post("/captchas", { tel: this.contactPhone }).then(res => {
+        // console.log(res);
+      });
+    },
+    // 提交订单
+    handleSubmit() {
+      /* 
+      1 保险id 数组 不需要验证 
+      2 把参数都放入到一个变量-对象中 方便 做验证而已
+        1 对象 也可以被循环
+       */
+      let form = {
+        // 数组
+        users: this.users,
+        // 数组
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        captcha: this.captcha,
+        // bool
+        invoice: this.invoice,
+        seat_xid: this.seat_xid,
+        air: this.air
+      };
     }
   },
   computed: {
@@ -194,7 +227,7 @@ export default {
       price *= this.users.length;
 
       // 触发父组件的事件
-      this.$emit("countPrice",price);
+      this.$emit("countPrice", price);
 
       return price;
     }
