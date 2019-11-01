@@ -8,7 +8,11 @@
           label-position="top"
           label-width="80px"
         >
-          <div class="user_item"  v-for="(item,index) in users" :key="index" >
+          <div
+            class="user_item"
+            v-for="(item,index) in users"
+            :key="index"
+          >
             <el-form-item label="乘机人类型">
               <el-row>
                 <el-col :span="6">
@@ -24,11 +28,15 @@
                   </el-select>
                 </el-col>
                 <el-col :span="18">
-                  <el-input v-model="item.username" ></el-input>
+                  <el-input v-model="item.username"></el-input>
                 </el-col>
               </el-row>
             </el-form-item>
-            <div class="decrement" @click="handleDecrement(index)"  v-if="index!==0" >-</div>
+            <div
+              class="decrement"
+              @click="handleDecrement(index)"
+              v-if="index!==0"
+            >-</div>
             <el-form-item label="证件类型">
               <el-row>
                 <el-col :span="6">
@@ -50,7 +58,10 @@
             </el-form-item>
           </div>
           <el-form-item>
-            <el-button @click="handleAddUser" type="primary">添加乘机人</el-button>
+            <el-button
+              @click="handleAddUser"
+              type="primary"
+            >添加乘机人</el-button>
 
           </el-form-item>
 
@@ -82,14 +93,14 @@
       <div class="contact_content">
         <el-form label-width="80px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input> <template slot="append">发送验证码</template></el-input>
+            <el-input v-model="contactPhone" > <template slot="append">发送验证码</template></el-input>
           </el-form-item>
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -112,16 +123,31 @@ export default {
   },
   data() {
     return {
-      users: [{ username: "", id: "" }]
+      // 乘机人
+      users: [{ username: "中三", id: "123" }],
+      // 保险id
+      insurances: [],
+      // 联系人名字
+      contactName: "李小四",
+      // 联系人电话
+      contactPhone: "31231232",
+      // 验证码  
+      captcha:"000000",
+      // 是否需要发票
+      invoice: false,
+      // 座位id
+      seat_xid: this.$route.query.seat_xid,
+      // 航班id
+      air: this.$route.query.id
     };
   },
   methods: {
-    handleAddUser(){
+    handleAddUser() {
       this.users.push({ username: "", id: "" });
     },
     // 减少乘机人
-    handleDecrement(index){
-      this.users.splice(index,1);
+    handleDecrement(index) {
+      this.users.splice(index, 1);
     }
   }
 };
@@ -138,9 +164,9 @@ export default {
   margin: 10px 0;
 }
 
-.user_item{
+.user_item {
   position: relative;
-  .decrement{
+  .decrement {
     position: absolute;
     width: 25px;
     height: 25px;
@@ -149,7 +175,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
- top: 114px;
+    top: 114px;
     right: 13px;
     border-radius: 50%;
     cursor: pointer;
