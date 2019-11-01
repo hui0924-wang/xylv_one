@@ -242,12 +242,14 @@ export default {
 
       // 获取 vuex 中的token
       const token=this.$store.state.user.userinfo.token;
-
       this.$axios.post("/airorders",form,{headers:{
          Authorization: `Bearer ${token}`
       }})
       .then(res=>{
-        console.log(res);
+        this.$message.success("订单提交成功");
+        setTimeout(() => {
+          this.$router.push({path:"/air/pay",query:{id:res.data.data.id}});
+        }, 1000);
       })
 
     }
