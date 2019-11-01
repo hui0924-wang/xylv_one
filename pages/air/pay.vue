@@ -2,7 +2,7 @@
   <div class="pay">
     <div class="pay_view">
       <div class="pay_price">
-        总金额: <span>￥199999</span>
+        总金额: <span>￥{{order.price}}</span>
       </div>
       <div class="pay_content">
         <div class="pay_title">微信支付</div>
@@ -26,7 +26,32 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      order:{}
+    }
+  },
+  mounted() {
+    // 发送请求 获取订单的支付状态
+    // axios.get() 定时器 不断 一直的发送请求去获取后台的 订单状态！！！！
+    //  轮询    在以前 也是通过 轮询来实现 web 聊天的！！！！！
+
+    // 1 获取 订单的数据 价格 和 支付的图片（二维码。。。）
+    const token = this.$store.state.user.userinfo.token;
+    // 2 使用get请求 文档谁写的！！！！！
+    this.$axios
+      .get(
+        "/airorders/" + this.$route.query.id,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(res => {
+        // 2 这个请求 私人的请求 带上token！！！！
+        console.log(res);
+        this.order=res.data;
+      });
+  }
+};
 </script>
 
 <style scoped lang="less">
