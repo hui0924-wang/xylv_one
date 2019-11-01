@@ -58,6 +58,26 @@ export default {
           if (error) console.error(error);
           console.log("success!");
         });
+
+        // 3 开启定时器 用来检测用户支付成功  私人的
+        let timeId = setInterval(() => {
+          this.$axios
+            .post(
+              "/airorders/checkpay",
+              {
+                id: this.$route.query.id,
+                nonce_str: res.data.payInfo.nonce_str,
+                out_trade_no: res.data.payInfo.order_no
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            )
+            .then(result => {
+              if(result.data.trade_state==="SUCCESS"){
+                clearInterval(timeId);
+                this.$message.success("支付成功");
+              }
+            });
+        }, 3000);
       });
   }
 };
