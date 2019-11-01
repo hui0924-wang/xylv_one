@@ -239,7 +239,16 @@ export default {
       // 发送异步请求
       form.users=this.users;
       form.insurances=this.insurances;
-     
+
+      // 获取 vuex 中的token
+      const token=this.$store.state.user.userinfo.token;
+
+      this.$axios.post("/airorders",form,{headers:{
+         Authorization: `Bearer ${token}`
+      }})
+      .then(res=>{
+        console.log(res);
+      })
 
     }
   },
