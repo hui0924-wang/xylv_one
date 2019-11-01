@@ -189,9 +189,9 @@ export default {
        */
       let form = {
         // 数组
-        users: this.users,
+        // users: this.users,
         // 数组
-        insurances: this.insurances,
+        // insurances: this.insurances,
         contactName: this.contactName,
         contactPhone: this.contactPhone,
         captcha: this.captcha,
@@ -200,6 +200,47 @@ export default {
         seat_xid: this.seat_xid,
         air: this.air
       };
+
+      // 对乘机人做表单验证
+      let isUserOk=true;
+      this.users.forEach(v=>{
+        // v = {username:"",id:""}
+        if(v.username===""||v.id===""){
+          // 都不合法 
+          // break;
+          isUserOk=false;
+        }
+      })
+
+    if(!isUserOk){
+      this.$message.warning("联系人输入不合法");
+      return;
+    }
+
+
+      // 拿对象来循环 校验
+      let isOk=true;
+      for (const key in form) {
+        // if(!form[key]){
+        if(form[key]===""){
+          // 不合法
+          this.$message.warning("输入不合法");
+          isOk=false;
+          break;
+        }
+        
+      }
+
+      if(!isOk){
+        // 不要继续往下执行
+        return;
+      }
+
+      // 发送异步请求
+      form.users=this.users;
+      form.insurances=this.insurances;
+     
+
     }
   },
   computed: {
