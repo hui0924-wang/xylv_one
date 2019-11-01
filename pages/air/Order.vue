@@ -1,10 +1,10 @@
 <template>
   <div class="order">
     <div class="order_main">
-      <OrderForm :ticket="ticket" />
+      <OrderForm @countPrice="countPrice" :ticket="ticket" />
     </div>
     <div class="order_aside">
-<OrderBill  :ticket="ticket"/>
+<OrderBill  :price="price"  :ticket="ticket"/>
     </div>
   </div>
 </template>
@@ -15,7 +15,9 @@ import OrderBill from "@/components/air/OrderBill";
 export default {
   data() {
     return {
-      ticket: {}
+      ticket: {},
+      // 机票的总价
+      price:0
     };
   },
   components: {
@@ -33,6 +35,11 @@ export default {
         this.ticket = res.data;
        
       });
+  },
+  methods: {
+    countPrice(price){
+      this.price=price;
+    }
   }
 };
 </script>

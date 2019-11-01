@@ -2,7 +2,9 @@
   <div>
     <!-- 1 乘机人 -->
     <div class="fly_people">
-      <div class="fly_people_title">乘机人 {{price}} </div>
+      <!-- 计算属性 没有在当前组件中 使用 就相当于 vue不会帮我们执行 计算的代码  -->
+      <input type="hidden" :value="price" />
+      <div class="fly_people_title">乘机人 </div>
       <div class="fly_people_content">
         <el-form
           label-position="top"
@@ -139,9 +141,7 @@ export default {
       // 座位id
       seat_xid: this.$route.query.seat_xid,
       // 航班id
-      air: this.$route.query.id,
-      // 被勾选的保险的价格 
-      insurancesPrice:0
+      air: this.$route.query.id
     };
   },
   methods: {
@@ -158,43 +158,45 @@ export default {
       // 假如 已经添加过了 就执行 删除
       // this.insurances.push(id);
 
-      const index=this.insurances.findIndex(v=>v===id);
-      if(index===-1){
+      const index = this.insurances.findIndex(v => v === id);
+      if (index === -1) {
         // 没有添加过
         this.insurances.push(id);
-      }else{
-        this.insurances.splice(index,1);
+      } else {
+        this.insurances.splice(index, 1);
       }
 
-      // 根据  this.insurances 里面的id 再去找 保险的价格 
+      // 根据  this.insurances 里面的id 再去找 保险的价格
     }
   },
   computed: {
-    price(){
-      let price=0;
+    price() {
+      let price = 0;
       // 机票费用
-      price+=this.ticket.base_price;
+      price += this.ticket.base_price;
       // 机建+燃油 费用
-      price+=this.ticket.airport_tax_audlet;
+      price += this.ticket.airport_tax_audlet;
       // 保险 费用   this.insurances =[1,2]
-      // 要拿到 1,2 id 去 ticket.insurances 找到 这个id 的价格 
-      this.insurances.forEach(v=>{
-        // v =1 =2 
+      // 要拿到 1,2 id 去 ticket.insurances 找到 这个id 的价格
+      this.insurances.forEach(v => {
+        // v =1 =2
         // 1 根据id获取 机票对象中 保险对象
         // vv =  {id: 1, type: "航空意外险", price: 30, compensation: "260万", created_at: 1555487082133,…}
-        const index=this.ticket.insurances.findIndex(vv=>vv.id===v);
-        
-        // 2 获取 保险对象
-        const item=this.ticket.insurances[index];
-        // 3 叠加价格
-        price+=item.price;
-      })
+        const index = this.ticket.insurances.findIndex(vv => vv.id === v);
 
-      // 乘机人的数量 
-      price*=this.users.length;
+        // 2 获取 保险对象
+        const item = this.ticket.insurances[index];
+        // 3 叠加价格
+        price += item.price;
+      });
+
+      // 乘机人的数量
+      price *= this.users.length;
+
+      // 触发父组件的事件
+      this.$emit("countPrice",price);
 
       return price;
-
     }
   }
 };

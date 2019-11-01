@@ -5,7 +5,7 @@
     <!-- 燃油 -->
     <div class="oil">机建+燃油:￥{{ticket.airport_tax_audlet}}</div>
     <!-- 总价 -->
-    <div class="total_price">应付总价:  {{}}</div>
+    <div class="total_price">应付总价:  {{price}}</div>
   </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
     ticket:{
       type:Object,
       default:{}
+    },
+    price:{
+      type:Number,
+      default:0
     }
   },
   mounted () {
