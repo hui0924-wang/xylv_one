@@ -9,12 +9,22 @@ export default {
   mounted() {
     window.onLoad = function() {
       // 5  js 加载完毕了！！！
-      var map = new AMap.Map("container");
+      var map = new AMap.Map("container", {
+        // 地图的缩放倍数
+        zoom: 12,
+        // 要显示的经纬度[经度，纬度]
+        center: [116.39, 39.9]
+      });
+
+      // 6 使用插件
+      var toolbar = new AMap.ToolBar();
+      // map.plugin(toolbar);
+      map.addControl(toolbar);
     };
 
-    // 1 定义 高度地图 js 路径
+    // 1 定义 高度地图 js 路径  同时下载了插件
     var url =
-      "https://webapi.amap.com/maps?v=1.4.15&key=b329f3568c3769213b6cc011593bf89d&callback=onLoad";
+      "https://webapi.amap.com/maps?v=1.4.15&key=b329f3568c3769213b6cc011593bf89d&callback=onLoad&plugin=AMap.ToolBar";
     // 2 手动创建了一个script标签
     var jsapi = document.createElement("script");
     jsapi.charset = "utf-8";
@@ -27,7 +37,7 @@ export default {
 </script>
 
 <style>
-.city{
+.city {
   width: 1000px;
   margin: 0 auto;
 }
