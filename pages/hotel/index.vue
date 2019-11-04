@@ -1,6 +1,6 @@
 <template>
-  <div class="h">
-    <div>酒店</div>
+  <div class="container">
+    <HotelSearch @getCity="getCityData" />
     <searchHotel/>
     <hotelList/>
   </div>
@@ -9,16 +9,20 @@
 <script>
 import searchHotel from '@/components/hotel/searchHotel.vue'
 import hotelList from '@/components/hotel/hotelList.vue'
+import HotelSearch from "@/components/hotel/HotelSearch.vue";
 export default {
-  components:{
-    searchHotel,hotelList
+  components: {
+    HotelSearch,searchHotel,hotelList
+  },
+  methods: {
+    // 当前选择城市
+    getCityData(value) {
+      console.log(value);
+    }
   }
-}
+};
 </script>
 
-<style lang="less" scoped>
-.hotel{
-  width: 1000px;
-  margin: 0 auto;
-}
+<style>
+
 </style>
