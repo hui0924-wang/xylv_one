@@ -2,20 +2,23 @@
   <div class="container">
     <!-- <HotelSearch @getCity="getCityData" /> -->
     <HotelSearch />
-    <searchHotel/>
-    <hotelList/>
+    <HotelOptions />
+    <searchHotel />
+    <hotelList />
   </div>
 </template>
 
 <script>
 import searchHotel from "@/components/hotel/searchHotel.vue";
+import HotelOptions from "@/components/hotel/HotelOptions";
 import hotelList from "@/components/hotel/hotelList.vue";
 import HotelSearch from "@/components/hotel/HotelSearch.vue";
 export default {
   components: {
     HotelSearch,
     searchHotel,
-    hotelList
+    hotelList,
+    HotelOptions
   },
   // methods: {
   //   // 当前选择城市
@@ -23,15 +26,15 @@ export default {
   //     console.log(value);
   //   }
   // }
-  mounted(){
-    console.log(this.$store.state)
+  mounted() {
+    console.log(this.$store.state);
     // this.$store.commit('')
   }
 };
 </script>
 
 <style lang="less" scoped>
-.container{
+.container {
   width: 1000px;
   margin: 0 auto;
 }
