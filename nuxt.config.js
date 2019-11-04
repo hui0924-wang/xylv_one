@@ -27,7 +27,8 @@ export default {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/axios'
+    '@/plugins/axios',
+    '@/plugins/route'
   ],
   /*
   ** Nuxt.js dev-modules

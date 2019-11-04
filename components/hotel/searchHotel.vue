@@ -82,7 +82,10 @@ export default {
   },
   methods:{
     handleChange(val){
-      console.log(this.searchData)
+      // 搜索条件改变时触发
+      // console.log(this)
+      this.$store.commit('hotelSearchOptions/hotelInfo',this.searchData)
+      // console.log(this.searchData)
     }
   },
   mounted(){
@@ -91,6 +94,8 @@ export default {
       this.options = res.data.data
       console.log(this.options)
     })
+    this.searchData = {...this.$store.state.hotelSearchOptions.searchOptions.hotelInfo}
+    console.log(this.searchData)
   }
 }
 </script>
@@ -104,7 +109,7 @@ export default {
   >div{
     flex:1;
     padding: 5px 20px;
-    border-left: 1px solid rgb(221, 221, 221);
+    border-right: 1px solid rgb(221, 221, 221);
   }
   >:last-child{
     border: none;

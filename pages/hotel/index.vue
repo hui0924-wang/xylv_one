@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <HotelSearch @getCity="getCityData" />
+    <!-- <HotelSearch @getCity="getCityData" /> -->
+    <HotelSearch />
     <searchHotel/>
     <hotelList/>
   </div>
@@ -14,15 +15,22 @@ export default {
   components: {
     HotelSearch,searchHotel,hotelList
   },
-  methods: {
-    // 当前选择城市
-    getCityData(value) {
-      console.log(value);
-    }
+  // methods: {
+  //   // 当前选择城市
+  //   getCityData(value) {
+  //     console.log(value);
+  //   }
+  // }
+  mounted(){
+    console.log(this.$store.state)
+    // this.$store.commit('')
   }
 };
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.container{
+  width: 1000px;
+  margin: 0 auto;
+}
 </style>
