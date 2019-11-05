@@ -3,10 +3,10 @@
     <div class="price">
       <p>
         <span>价格</span>
-        <span>0-{{searchData.price_in}}</span>
+        <span>0-{{searchData.price_lt}}</span>
       </p>
       <el-slider
-        v-model="searchData.price_in"
+        v-model="searchData.price_lt"
         :step="10"
         :min="0"
         :max="4000"
@@ -16,7 +16,7 @@
     </div>
     <div class="levels">
       <p>住宿等级</p>
-      <el-select style="border:none" v-model="searchData.hotellevel" multiple placeholder="不限" collapse-tags @change="handleChange">
+      <el-select style="border:none" v-model="searchData.hotellevel_in" multiple placeholder="不限" collapse-tags @change="handleChange">
         <el-option
           v-for="item in options.levels"
           :key="item.level"
@@ -28,7 +28,7 @@
     </div>
     <div class="types">
       <p>住宿类型</p>
-      <el-select v-model="searchData.hoteltype" multiple placeholder="不限" collapse-tags @change="handleChange">
+      <el-select v-model="searchData.hoteltype_in" multiple placeholder="不限" collapse-tags @change="handleChange">
         <el-option
           v-for="item in options.types"
           :key="item.id"
@@ -40,7 +40,7 @@
     </div>
     <div class="assets">
       <p>酒店设施</p>
-      <el-select v-model="searchData.hotellasset" multiple placeholder="不限" collapse-tags @change="handleChange">
+      <el-select v-model="searchData.hotelasset_in" multiple placeholder="不限" collapse-tags @change="handleChange">
         <el-option
           v-for="item in options.assets"
           :key="item.id"
@@ -52,7 +52,7 @@
     </div>
     <div class="brands">
       <p>酒店品牌</p>
-      <el-select v-model="searchData.hotelbrand" multiple placeholder="不限" collapse-tags @change="handleChange">
+      <el-select v-model="searchData.hotelbrand_in" multiple placeholder="不限" collapse-tags @change="handleChange">
         <el-option
           v-for="item in options.brands"
           :key="item.id"
@@ -72,11 +72,11 @@ export default {
       price:0,
       options:{},
       searchData:{
-        hotellevel:[],
-        hoteltype:[],
-        hotelbrand:[],
-        hotellasset:[],
-        price_in:0
+        hotellevel_in:[],
+        hoteltype_in:[],
+        hotelbrand_in:[],
+        hotelasset_in:[],
+        price_lt:0
       }
     }
   },
@@ -84,8 +84,11 @@ export default {
     handleChange(val){
       // 搜索条件改变时触发
       // console.log(this)
-      this.$store.commit('hotelSearchOptions/hotelInfo',this.searchData)
+      // let obj = {...this.searchData}
+      // this.$store.commit('hotelSearchOptions/hotelInfo',obj)
       // console.log(this.searchData)
+      this.$emit('handleHotelInfo',this.searchData)
+      console.log(this.searchData)
     }
   },
   mounted(){
@@ -94,7 +97,7 @@ export default {
       this.options = res.data.data
       console.log(this.options)
     })
-    this.searchData = {...this.$store.state.hotelSearchOptions.searchOptions.hotelInfo}
+    // this.searchData = {...this.$store.state.hotelSearchOptions.searchOptions.hotelInfo}
     console.log(this.searchData)
   }
 }

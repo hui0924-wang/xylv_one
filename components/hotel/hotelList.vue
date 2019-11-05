@@ -50,7 +50,7 @@
         layout="prev, pager, next"
         @current-change="pageChange"
         :page-size="10"
-        :total="total"
+        :total="hotelDate.total"
         prev-text="< 上一页"
         next-text="下一页 >"
         >
@@ -61,20 +61,17 @@
 
 <script>
 export default {
+  props:{
+    hotelDate:{
+      type:Object,
+      default:{}
+    }
+  },
   data(){
     return{
       star:3.5,
-      hotelDate:{},
       total: 0
     }
-  },
-  mounted(){
-    this.$axios.get('/hotels')
-    .then(res=>{
-      this.hotelDate = res.data
-      this.total = this.hotelDate.total
-      // console.log(res)
-    })
   },
   filters:{
     // 随机的评价数量和游记数量
@@ -83,18 +80,11 @@ export default {
     }
   },
   methods:{
-    init(params){
-      params = params?params:''
-      this.$axios.get('/hotels',{params})
-      .then(res=>{
-        this.hotelDate = res.data
-        this.total = this.hotelDate.total
-        // console.log(res)
-      })
-    },
     pageChange(val){
       // console.log(val)
-      this.init({_start:(val-1)*10})
+      // this.init({_start:(val-1)*10})
+      let str = `&_start=${(val-1)*10}`
+      this.$emit('handlePage',val)
     }
   }
 }
