@@ -1,17 +1,16 @@
 <template>
   <div class="container">
     <!-- <HotelSearch @getCity="getCityData" /> -->
-    <HotelSearch />
+    <!-- 我改动的 -->
+    <HotelSearch @getCity="getCityData" />
+    <HotelOptions :scenicsList="scenicsList" />
     <searchHotel @handleHotelInfo="handleHotelInfo"/>
     <hotelList :hotelDate="hotelDate" @handlePage="handlePage"/>
-    <HotelOptions />
-    <searchHotel />
-    <hotelList />
   </div>
 </template>
 
 <script>
-import searchHotel from "@/components/hotel/searchHotel.vue";
+import searchHotel from "@/components/hotel/searchHotel";
 import HotelOptions from "@/components/hotel/HotelOptions";
 import hotelList from "@/components/hotel/hotelList.vue";
 import HotelSearch from "@/components/hotel/HotelSearch.vue";
@@ -21,6 +20,7 @@ export default {
       hotelDate:{},
       hotelInfo:{},
       pageInfo:0,
+      scenicsList: [],
       // 存放所有筛选的数据
       allSearchInfo:{
 
@@ -167,8 +167,13 @@ export default {
       str += `&_start=${(val-1)*10}`
       this.init(str)
     },
+    // 当前选择城市
+    getCityData(value) {
+      // console.log(value);
+      this.scenicsList = value.scenics;
+    },
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
