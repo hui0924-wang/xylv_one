@@ -54,12 +54,13 @@ data () {
        font-size: 12px;
        display: flex;
        justify-content: space-between;
+        padding: 5px 0 0 5px;
       //  align-items: center;
         .info_left {
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 5px 0 0 5px;
+         
           color: #999;
           img {
           width: 16px;
