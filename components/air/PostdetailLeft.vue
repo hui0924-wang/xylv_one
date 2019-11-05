@@ -66,7 +66,6 @@
     <PostdetailLeftList /> 
      <!-- 评论 -->
 
-     
     </div>
   </div>
 </template>
@@ -76,7 +75,7 @@ import PostdetailLeftList from '@/components/air/PostdetailLeftList'
 export default {
   data(){
     return {
-      postDetail:[]   
+      postDetail:[]
     }
   },
   components: {
