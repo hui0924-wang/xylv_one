@@ -1,13 +1,18 @@
 <template>
-  <div>攻略</div>
+  <div class="strategy">
+    <search/>
+  </div>
 </template>
 
 <script>
+import Search from '@/components/post/search'
 export default {
-
+  components:{
+    Search
+  }
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 
 </style>

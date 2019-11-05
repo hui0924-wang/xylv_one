@@ -1,7 +1,7 @@
 <template>
   <div class="hotelList">
-    <div class="hotelItem" v-for="(item,index) in hotelDate.data" :key="index">
-      <img :src="item.photos" style="width:320px;height:210px" alt="">
+    <div class="hotelItem" v-for="(item,index) in hotelDate.data" :key="index" @click="Hoteljump">
+       <img :src="item.photos" style="width:320px;height:210px" alt="">
       <div class="info">
         <div class="name">
           <p>{{item.name}}</p>
@@ -64,7 +64,9 @@ export default {
   data(){
     return{
       star:3.5,
-      hotelDate:{},
+      city: '',
+      tdate:[],
+      hotelDate:[],
       total: 0
     }
   },
@@ -92,9 +94,17 @@ export default {
         // console.log(res)
       })
     },
+
+    gethotlebyarea(){
+
+    },
+
     pageChange(val){
       // console.log(val)
       this.init({_start:(val-1)*10})
+    },
+    Hoteljump(){
+      this.$router.push('/hotel/id');
     }
   }
 }

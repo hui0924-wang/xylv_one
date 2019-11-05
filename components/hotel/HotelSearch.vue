@@ -103,7 +103,8 @@ export default {
         name: "南京"
       },
       form: {
-        city: 74
+        city: 74,
+        scenic: 3236
       },
       // 酒店详情数据
       hotelDetail: {}
