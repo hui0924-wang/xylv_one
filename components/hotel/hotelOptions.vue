@@ -12,6 +12,7 @@
                 v-for="(item,index) in scenicsList"
                 :key="index"
                 :class="{'location_name':true}"
+                @click="handleScenic(index)"
               >{{item.name}}</a>
             </div>
             <a href="#" @click="toggleshow">
@@ -52,7 +53,7 @@
         </el-row>
       </el-col>
       <el-col :span="10">
-       <MapBox/>
+        <MapBox />
       </el-col>
     </el-row>
   </div>
@@ -63,7 +64,8 @@ import AveragePrice from "@/components/hotel/AveragePrice";
 import MapBox from "@/components/hotel/MapBox";
 export default {
   components: {
-    AveragePrice,MapBox
+    AveragePrice,
+    MapBox
   },
   props: {
     scenicsList: {
@@ -84,6 +86,12 @@ export default {
   methods: {
     toggleshow() {
       this.show = !this.show;
+    },
+    // 点击景点事件
+    handleScenic(index) {
+      const id = this.scenicsList[index].id;
+      console.log(id);
+      this.$emit("getScenic", id);
     }
   }
 };
