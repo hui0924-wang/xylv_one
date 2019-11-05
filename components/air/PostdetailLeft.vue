@@ -65,6 +65,8 @@
     <!-- 评论 -->
     <PostdetailLeftList /> 
      <!-- 评论 -->
+
+     
     </div>
   </div>
 </template>
@@ -116,13 +118,15 @@ export default {
     text-align: right;
     padding: 20px;
   }
-  /deep/.detail_content {
-   
-     /deep/img{
+   .detail_content {
+     
+       /deep/img{
      width: 100%;
     // object-fit: cover;
       
     }
+     
+    
   }
   .detail_ctrl {
     display: flex;
