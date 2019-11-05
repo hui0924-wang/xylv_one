@@ -3,7 +3,14 @@
     <!-- <HotelSearch @getCity="getCityData" /> -->
     <!-- 我改动的 -->
     <HotelSearch @getCity="getCityData" @othersData="handleOthersData"/>
-    <HotelOptions :scenicsList="scenicsList" @getScenic="getScenic"/>
+    <el-row type="flex" :gutter="10" class="hotel-option-row">
+      <el-col :span="14">
+        <HotelOptions :scenicsList="scenicsList" @getScenic="getScenic" />
+      </el-col>
+      <el-col :span="10">
+        <MapBox :value="hotelDate.data"/>
+      </el-col>
+    </el-row>
     <searchHotel @handleHotelInfo="handleHotelInfo"/>
     <hotelList :hotelDate="hotelDate" @handlePage="handlePage"/>
   </div>
@@ -12,32 +19,32 @@
 <script>
 import searchHotel from "@/components/hotel/searchHotel";
 import HotelOptions from "@/components/hotel/HotelOptions";
+import MapBox from "@/components/hotel/MapBox";
 import hotelList from "@/components/hotel/hotelList.vue";
 import HotelSearch from "@/components/hotel/HotelSearch.vue";
 export default {
-  data(){
+  data() {
     return {
-      hotelDate:{},
-      hotelInfo:{},
-      pageInfo:0,
+      hotelDate: {},
+      hotelInfo: {},
+      pageInfo: 0,
       scenicsList: [],
       currentCityId:0,
       othersData:{},
       scenic:'',
       axiosStr : '',
       // 存放所有筛选的数据
-      allSearchInfo:{
-
-      }
-    }
+      allSearchInfo: {}
+    };
   },
   components: {
     HotelSearch,
+    MapBox,
     searchHotel,
     hotelList,
     HotelOptions
   },
-  mounted(){
+  mounted() {
     // console.log(this.$store.state)
     this.allSearchInfo = this.$route.query
     // console.log(this._data)
@@ -48,10 +55,10 @@ export default {
     //   this.hotelDate = res.data
     // })
   },
-  methods:{
-    init(str){
-      if(!str){
-        str = ''
+  methods: {
+    init(str) {
+      if (!str) {
+        str = "";
       }
       this.$axios.get(`/hotels?${str}`)
       .then(res=>{
@@ -97,7 +104,6 @@ export default {
         }
       }
 
-      
       // 处理酒店类型
       let hoteltype_in = ''
       if(this.hotelInfo.hoteltype_in){
@@ -171,7 +177,7 @@ export default {
       this.init(this.axiosStr)
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
