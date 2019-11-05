@@ -134,11 +134,11 @@ export default {
     },
     // 2 点击 城市
     handleSelect(item) {
-      // console.log(item);
+      console.log(item);
       // this.form.city = item.id;
       this.searchData.city = item.id;
       // 发射事件
-      this.$emit("getCity", item.id);
+      this.$emit("getCity", item);
     },
     // 时间改变事件
     changeTime() {
@@ -187,8 +187,8 @@ export default {
       .then(res => {
         // console.log(res);
         this.cityData = res.data.data[0];
-        // console.log(this.cityData);
-        this.$emit("getCity", this.cityData.id);
+        console.log(this.cityData);
+        this.$emit("getCity", this.cityData);
       });
   }
 };
