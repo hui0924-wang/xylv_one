@@ -3,7 +3,7 @@
     <!-- <HotelSearch @getCity="getCityData" /> -->
     <!-- 我改动的 -->
     <HotelSearch @getCity="getCityData" @othersData="handleOthersData"/>
-    <HotelOptions :scenicsList="scenicsList" />
+    <HotelOptions :scenicsList="scenicsList" @getScenic="getScenic"/>
     <searchHotel @handleHotelInfo="handleHotelInfo"/>
     <hotelList :hotelDate="hotelDate" @handlePage="handlePage"/>
   </div>
