@@ -40,13 +40,13 @@ export default {
   mounted(){
     // console.log(this.$store.state)
     this.allSearchInfo = this.$route.query
-    console.log(this._data)
+    // console.log(this._data)
     this.handleAxiosStr()
-    console.log(this.axiosStr)
-    this.$axios.get('/hotels',{params:this.$route.query})
-    .then(res=>{
-      this.hotelDate = res.data
-    })
+    // console.log(this.axiosStr)
+    // this.$axios.get('/hotels',{params:this.$route.query})
+    // .then(res=>{
+    //   this.hotelDate = res.data
+    // })
   },
   methods:{
     init(str){
