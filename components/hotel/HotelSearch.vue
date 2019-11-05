@@ -71,15 +71,10 @@
         </el-form-item>
       </el-form>
     </div>
-    <HotelOptions :cityData="cityData" :hotelDetail="hotelDetail" />
   </div>
 </template>
 <script>
-import HotelOptions from "@/components/hotel/HotelOptions";
 export default {
-  components: {
-    HotelOptions
-  },
   data() {
     return {
       // 住房时间
@@ -98,6 +93,17 @@ export default {
 
       // 当前城市
       currentCity: "南京",
+      // form: {
+      //   city: 74
+      // },
+      // 子传父数据
+      searchData: {
+        person: 0,
+        city: 74,
+        enterTime: "",
+        leftTime: ""
+      },
+
       // 城市相关数据
       cityData: {
         name: "南京"
@@ -108,7 +114,10 @@ export default {
       },
       // 酒店详情数据
       hotelDetail: {}
-    };
+      
+      // // 酒店详情数据
+      // hotelDetail: {}
+    }
   },
 
   methods: {
@@ -119,7 +128,7 @@ export default {
         this.$axios
           .get("/cities", { params: { name: queryString } })
           .then(res => {
-            console.log(res);
+            // console.log(res);
             let cityArr = res.data.data;
             cityArr.forEach(v => {
               // 把 广州市  “市” 移除 因为 后台不需要 “市”
@@ -133,17 +142,15 @@ export default {
     // 2 点击 城市
     handleSelect(item) {
       console.log(item);
-      this.cityData = item;
-      this.form.city = item.id;
+      // this.form.city = item.id;
+      this.searchData.city = item.id;
       // 发射事件
       this.$emit("getCity", item);
-      // 发送请求
-      this.init();
     },
     // 时间改变事件
     changeTime() {
-      this.form.enterTime = this.time[0];
-      this.form.leftTime = this.time[1];
+      this.searchData.enterTime = this.time[0];
+      this.searchData.leftTime = this.time[1];
     },
     // 成人人数 改变事件  select选中值改变时
     handleAdultChange(value) {
@@ -168,31 +175,27 @@ export default {
         })
         .join(" ");
       this.visable = false;
-      // 总人数
-      this.form.person = this.adultCount + this.childrenCount;
+      this.searchData.person = this.adultCount + this.childrenCount;
       // console.log(this.totalCountLabel);
     },
-    init() {
-      let { person, ...resForm } = this.form;
-      this.$axios.get("/hotels", { params: resForm }).then(res => {
-        console.log(res);
-        // 获取酒店详情
-        this.hotelDetail = res.data;
-        this.$router.push({ path: "/hotel", query: resForm });
-      });
-    },
+    // 查询价格
     searchPrice() {
-      this.init();
+      let { city, ...resSearchData } = this.searchData;
+      // console.log(resSearchData);
+      // 发射事件
+      this.$emit("othersData", resSearchData);
     }
   },
   // 页面刷新
   mounted() {
-    this.init();
+    // 获取城市数据
     this.$axios
       .get("/cities", { params: { name: this.currentCity } })
       .then(res => {
         // console.log(res);
         this.cityData = res.data.data[0];
+        console.log(this.cityData);
+        this.$emit("getCity", this.cityData);
       });
   }
 };
