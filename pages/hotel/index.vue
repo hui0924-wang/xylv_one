@@ -23,6 +23,7 @@ export default {
       scenicsList: [],
       currentCityId:0,
       othersData:{},
+      scenic:'',
       axiosStr : '',
       // 存放所有筛选的数据
       allSearchInfo:{
@@ -151,9 +152,18 @@ export default {
           str += `&${key}=${this.othersData[key]}`
         }
       }
+      // 拼接景点id
+      if(this.scenic){
+        str += `&scenic=${this.scenic}`
+      }
 
       this.axiosStr = str
       return str
+    },
+    // 景点id
+    getScenic(val){
+      this.scenic = val
+      this.handleAxiosStr()
     }
   },
   watch:{
