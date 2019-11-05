@@ -2,8 +2,7 @@
   <div class="container">
     <!-- <HotelSearch @getCity="getCityData" /> -->
     <!-- 我改动的 -->
-    <HotelSearch @getCity="getCityData" />
-
+    <HotelSearch @getCity="getCityData" @othersData="handleOthersData"/>
     <el-row type="flex" :gutter="10" class="hotel-option-row">
       <el-col :span="14">
         <HotelOptions :scenicsList="scenicsList" @getScenic="getScenic" />
@@ -12,8 +11,8 @@
         <MapBox :value="hotelDate.data"/>
       </el-col>
     </el-row>
-    <searchHotel @handleHotelInfo="handleHotelInfo" />
-    <hotelList :hotelDate="hotelDate" @handlePage="handlePage" />
+    <searchHotel @handleHotelInfo="handleHotelInfo"/>
+    <hotelList :hotelDate="hotelDate" @handlePage="handlePage"/>
   </div>
 </template>
 
@@ -30,6 +29,10 @@ export default {
       hotelInfo: {},
       pageInfo: 0,
       scenicsList: [],
+      currentCityId:0,
+      othersData:{},
+      scenic:'',
+      axiosStr : '',
       // 存放所有筛选的数据
       allSearchInfo: {}
     };
@@ -43,138 +46,136 @@ export default {
   },
   mounted() {
     // console.log(this.$store.state)
-    this.allSearchInfo = this.$route.query;
-    // console.log(this.allSearchInfo)
+    this.allSearchInfo = this.$route.query
+    // console.log(this._data)
+    this.handleAxiosStr()
+    // console.log(this.axiosStr)
     // this.$axios.get('/hotels',{params:this.$route.query})
     // .then(res=>{
     //   this.hotelDate = res.data
     // })
-    // console.log(this.allSearchInfo)
-    let str = this.handleHotelInfo(this.allSearchInfo);
-    console.log(str);
-    this.init(str);
   },
   methods: {
     init(str) {
       if (!str) {
         str = "";
       }
-      this.$axios.get(`/hotels?${str}`).then(res => {
-        this.hotelDate = res.data;
-      });
+      this.$axios.get(`/hotels?${str}`)
+      .then(res=>{
+        this.hotelDate = res.data
+      })
+      this.$router.push(`/hotel?${str}`)
     },
-    handleHotelInfo(val) {
-      this.hotelInfo = val;
+    // 处理酒店的基础信息
+    handleHotelInfo(val){
+      this.hotelInfo = val
+      this.handleAxiosStr()
+    },
+    // 处理上下页
+    handlePage(val){
+      let page = `&_start=${(val-1)*10}`
+      this.axiosStr = this.handleAxiosStr() + page
+    },
+    // 当前选择城市
+    getCityData(value) {
+      this.currentCityId = value.id
+      this.scenicsList = value.scenics
+      this.handleAxiosStr()
+    },
+    // 处理日期等参数
+    handleOthersData(val){
+      this.othersData = val
+      this.handleAxiosStr()
+    },
+    // 拼接参数
+    handleAxiosStr(){
+      let str = ''
 
       // 处理酒店等级
-      let hotellevel_in = "";
-      if (val.hotellevel_in) {
-        if (val.hotellevel_in.length > 1) {
-          val.hotellevel_in.forEach(v => {
-            hotellevel_in += "&hotellevel_in=" + v;
+      let hotellevel_in = ''
+      if(this.hotelInfo.hotellevel_in){
+        if(this.hotelInfo.hotellevel_in.length>1){
+          this.hotelInfo.hotellevel_in.forEach(v => {
+            hotellevel_in += '&hotellevel_in=' + v
           });
-        } else if (val.hotellevel_in.length === 1) {
-          hotellevel_in += "&hotellevel_in=" + val.hotellevel_in[0];
+        }else 
+        if(this.hotelInfo.hotellevel_in.length===1){
+          hotellevel_in += '&hotellevel_in=' + this.hotelInfo.hotellevel_in[0]
         }
       }
 
       // 处理酒店类型
-      let hoteltype_in = "";
-      if (val.hoteltype_in) {
-        if (val.hoteltype_in.length > 1) {
-          val.hoteltype_in.forEach(v => {
-            hoteltype_in += "&hoteltype_in=" + v;
+      let hoteltype_in = ''
+      if(this.hotelInfo.hoteltype_in){
+        if(this.hotelInfo.hoteltype_in.length>1){
+          this.hotelInfo.hoteltype_in.forEach(v => {
+            hoteltype_in += '&hoteltype_in=' + v
           });
-        } else if (val.hoteltype_in.length === 1) {
-          hoteltype_in += "&hoteltype_in=" + val.hoteltype_in[0];
+        }else 
+        if(this.hotelInfo.hoteltype_in.length===1){
+          hoteltype_in += '&hoteltype_in=' + this.hotelInfo.hoteltype_in[0]
         }
       }
 
       // 处理酒店品牌
-      let hotelbrand_in = "";
-      if (val.hotelbrand_in) {
-        if (val.hotelbrand_in.length > 1) {
-          val.hotelbrand_in.forEach(v => {
-            hotelbrand_in += "&hotelbrand_in=" + v;
+      let hotelbrand_in = ''
+      if(this.hotelInfo.hotelbrand_in){
+        if(this.hotelInfo.hotelbrand_in.length>1){
+          this.hotelInfo.hotelbrand_in.forEach(v => {
+            hotelbrand_in += '&hotelbrand_in=' + v
           });
-        } else if (val.hotelbrand_in.length === 1) {
-          hotelbrand_in += "&hotelbrand_in=" + val.hotelbrand_in[0];
+        }else 
+        if(this.hotelInfo.hotelbrand_in.length===1){
+          hotelbrand_in += '&hotelbrand_in=' + this.hotelInfo.hotelbrand_in[0]
         }
       }
 
       // 处理酒店设施
-      let hotelasset_in = "";
-      if (val.hotelasset_in) {
-        if (val.hotelasset_in.length > 1) {
-          val.hotelasset_in.forEach(v => {
-            hotelasset_in += "&hotelasset_in=" + v;
+      let hotelasset_in = ''
+      if(this.hotelInfo.hotelasset_in){
+        if(this.hotelInfo.hotelasset_in.length>1){
+          this.hotelInfo.hotelasset_in.forEach(v => {
+            hotelasset_in += '&hotelasset_in=' + v
           });
-        } else if (val.hotelasset_in.length === 1) {
-          hotelasset_in += "&hotelasset_in=" + val.hotelasset_in[0];
+        }else 
+        if(this.hotelInfo.hotelasset_in.length===1){
+          hotelasset_in += '&hotelasset_in=' + this.hotelInfo.hotelasset_in[0]
         }
       }
 
       // 处理价格
-      let price_lt = "";
-      if (val.price_lt) {
-        price_lt = `&price_lt=${val.price}`;
+      let price_lt = ''
+      if(this.hotelInfo.price_lt){
+        price_lt = `&price_lt=${this.hotelInfo.price}`
       }
 
-      let str =
-        hotellevel_in + hoteltype_in + hotelbrand_in + hotelasset_in + price_lt;
-      console.log(str);
-      // this.$route.fullPath += str
+      str += hotellevel_in+hoteltype_in+hotelbrand_in+hotelasset_in+price_lt
+      // 处理城市id
+      str += `&city=${this.currentCityId}`
+      // 处理入住人数等信息
+      for(let key in this.othersData){
+        if(this.othersData[key]){
+          str += `&${key}=${this.othersData[key]}`
+        }
+      }
+      // 拼接景点id
+      if(this.scenic){
+        str += `&scenic=${this.scenic}`
+      }
 
-      // 跳转存参数
-      this.$router.push(`/hotel?${str}`);
-      // console.log(this.$route.query)
-
-      // 把字符串转化为对象-未完成
-      // if(str){
-      //   let tempArr = str.split('&')
-      //   tempArr.shift()
-      //   console.log(tempArr)
-      //   let obj = {}
-      //   tempArr.forEach(v=>{
-      //     let temp = v.split('=')
-      //     console.log(temp)
-      // console.log(temp[0])          //   obj.temp[0] = temp[1]
-      // 如果已存在，变为数组形式
-      // if(obj.length!==0){
-      //   for(let key in obj){
-      //     console.log(key)
-      //     if(key==temp[0]){
-      //       let value = obj[key]
-      //       delete obj[key]
-      //       obj[key] = []
-      //       obj[key].push(value)
-      //       obj[key].push(temp[1])
-      //     }else{
-      // obj.temp[0]=temp[1]
-      //     }
-      //   }
-      // }
-
-      //   })
-      //   console.log(obj)
-      // }
-      console.log(str);
-      // 页面初始化
-      this.init(str);
-      return str;
+      this.axiosStr = str
+      return str
     },
-    handlePage(val) {
-      let obj = this.hotelInfo;
-      let str = this.handleHotelInfo(obj);
-      str += `&_start=${(val - 1) * 10}`;
-      this.init(str);
-    },
-    // 当前选择城市
-    getCityData(value) {
-      // console.log(value);
-      this.scenicsList = value.scenics;
-    },
-    getScenic(id) {}
+    // 景点id
+    getScenic(val){
+      this.scenic = val
+      this.handleAxiosStr()
+    }
+  },
+  watch:{
+    axiosStr(){
+      this.init(this.axiosStr)
+    }
   }
 };
 </script>
