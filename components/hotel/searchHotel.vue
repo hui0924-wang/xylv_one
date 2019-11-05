@@ -11,8 +11,7 @@
         :min="0"
         :max="4000"
         @change="handleChange"
-        >
-      </el-slider>
+      ></el-slider>
     </div>
     <div class="levels">
       <p>住宿等级</p>
@@ -22,8 +21,7 @@
           :key="item.level"
           :label="item.name"
           :value="item.id"
-          >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="types">
@@ -46,8 +44,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-          >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="brands">
@@ -58,8 +55,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-          >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
   </div>
@@ -67,7 +63,7 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
       price:0,
       options:{},
@@ -78,10 +74,10 @@ export default {
         hotelasset_in:[],
         price_lt:0
       }
-    }
+    };
   },
-  methods:{
-    handleChange(val){
+  methods: {
+    handleChange(val) {
       // 搜索条件改变时触发
       // console.log(this)
       // let obj = {...this.searchData}
@@ -100,27 +96,27 @@ export default {
     // this.searchData = {...this.$store.state.hotelSearchOptions.searchOptions.hotelInfo}
     console.log(this.searchData)
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-.searchHotel{
+.searchHotel {
   margin: 10px 0;
   border: 1px solid rgb(221, 221, 221);
   padding: 8px 0;
   display: flex;
-  >div{
-    flex:1;
+  > div {
+    flex: 1;
     padding: 5px 20px;
     border-right: 1px solid rgb(221, 221, 221);
   }
-  >:last-child{
+  > :last-child {
     border: none;
   }
-  .price{
+  .price {
     flex: 1.2;
   }
-  /deep/input{
+  /deep/input {
     border: none;
     padding-left: 0;
   }

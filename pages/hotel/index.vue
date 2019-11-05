@@ -4,12 +4,16 @@
     <HotelSearch />
     <searchHotel @handleHotelInfo="handleHotelInfo"/>
     <hotelList :hotelDate="hotelDate" @handlePage="handlePage"/>
+    <HotelOptions />
+    <searchHotel />
+    <hotelList />
   </div>
 </template>
 
 <script>
-import searchHotel from '@/components/hotel/searchHotel.vue'
-import hotelList from '@/components/hotel/hotelList.vue'
+import searchHotel from "@/components/hotel/searchHotel.vue";
+import HotelOptions from "@/components/hotel/HotelOptions";
+import hotelList from "@/components/hotel/hotelList.vue";
 import HotelSearch from "@/components/hotel/HotelSearch.vue";
 export default {
   data(){
@@ -24,7 +28,10 @@ export default {
     }
   },
   components: {
-    HotelSearch,searchHotel,hotelList
+    HotelSearch,
+    searchHotel,
+    hotelList,
+    HotelOptions
   },
   mounted(){
     // console.log(this.$store.state)
@@ -165,7 +172,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.container{
+.container {
   width: 1000px;
   margin: 0 auto;
 }

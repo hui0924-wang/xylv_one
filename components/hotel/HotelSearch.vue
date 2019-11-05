@@ -35,7 +35,7 @@
         </el-form-item>
         <!-- 人数选择 -->
         <el-form-item>
-          <el-popover placement="bottom-start" width="300" :visible-arrow="false">
+          <el-popover placement="bottom-start" width="300" :visible-arrow="false" v-model="visable">
             <el-row class="options" type="flex" align="middle" :gutter="10">
               <el-col :span="8">每间</el-col>
               <el-col :span="8">
@@ -67,23 +67,19 @@
         </el-form-item>
         <!-- 查看价格 -->
         <el-form-item>
-          <el-button type="primary">查看价格</el-button>
+          <el-button type="primary" @click="searchPrice">查看价格</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <HotelOptions :cityData="cityData" />
   </div>
 </template>
 <script>
-import HotelOptions from "@/components/hotel/HotelOptions";
 export default {
-  components: {
-    HotelOptions
-  },
   data() {
     return {
       // 住房时间
       time: [],
+      visable: false,
       // 成人数
       adultCount: 2,
       // 儿童数
@@ -97,15 +93,23 @@ export default {
 
       // 当前城市
       currentCity: "南京",
-      // 城市相关数据
-      cityData: {
-        name: "南京"
-      },
-      form: {
+      // form: {
+      //   city: 74
+      // },
+      // 子传父数据
+      searchData: {
+        person: 0,
         city: 74,
         enterTime: "",
         leftTime: ""
+      },
+
+      // 城市相关数据
+      cityData: {
+        name: "南京"
       }
+      // // 酒店详情数据
+      // hotelDetail: {}
     };
   },
 
@@ -130,16 +134,16 @@ export default {
     },
     // 2 点击 城市
     handleSelect(item) {
-      console.log(item);
-      this.cityData = item;
-      this.form.city = item.id;
+      // console.log(item);
+      // this.form.city = item.id;
+      this.searchData.city = item.id;
       // 发射事件
-      this.$emit("getCity", item);
+      this.$emit("getCity", item.id);
     },
     // 时间改变事件
     changeTime() {
-      this.enterTime = this.time[0];
-      this.leftTime = this.time[1];
+      this.searchData.enterTime = this.time[0];
+      this.searchData.leftTime = this.time[1];
     },
     // 成人人数 改变事件  select选中值改变时
     handleAdultChange(value) {
@@ -163,12 +167,30 @@ export default {
           return (v = v + suffix[index]);
         })
         .join(" ");
-      console.log(this.totalCountLabel);
+      this.visable = false;
+      this.searchData.person = this.adultCount + this.childrenCount;
+      // console.log(this.totalCountLabel);
+    },
+    // 查询价格
+    searchPrice() {
+      let { city, ...resSearchData } = this.searchData;
+      // console.log(resSearchData);
+      // 发射事件
+      this.$emit("othersData", resSearchData);
     }
   },
-  // mounted() {
-  //   this.$axios.get('/hotels')
-  // }
+  // 页面刷新
+  mounted() {
+    // 获取城市数据
+    this.$axios
+      .get("/cities", { params: { name: this.currentCity } })
+      .then(res => {
+        // console.log(res);
+        this.cityData = res.data.data[0];
+        // console.log(this.cityData);
+        this.$emit("getCity", this.cityData.id);
+      });
+  }
 };
 </script>
 
