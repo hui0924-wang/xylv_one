@@ -17,7 +17,7 @@ export default {
   mounted() {
     window.onLoad = () => {
       const map = new AMap.Map("container", {
-        center: [118.9213, 31.75649]
+        // center: [118.9213, 31.75649]
       });
       this.map = map;
       this.addMarks();
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     addMarks() {
-      // console.log(1);
+      // console.log(this.value);
       if (typeof AMap !== "object" || !this.value) {
         return;
       }
@@ -69,20 +69,22 @@ export default {
         marker.on("mouseout", closeInfoWin);
         return marker;
       });
-      // 添加到地图
-      map.add(markers);
+      map.clearMap();
+      map.add(markers); //添加到地图
+      map.setFitView();
     }
   },
   watch: {
     // 常规方式
     value: {
       handler(newV, oldV) {
-        this.loaded = this.value;
-        console.log(this.value);
+        this.loaded = !!this.value;
+        // console.log(newV, oldV);
         if (this.map) {
-          if (this.value) {
-            this.addMarks();
+          if (!this.value) {
+            this.map.clearMap();
           } else {
+            this.addMarks();
           }
         }
       },

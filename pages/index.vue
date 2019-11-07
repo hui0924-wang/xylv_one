@@ -48,7 +48,8 @@ export default {
   // },
   components: {
     TypesTab
-  }
+  },
+ 
 };
 </script>
 

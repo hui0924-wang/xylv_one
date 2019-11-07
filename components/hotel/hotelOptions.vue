@@ -5,11 +5,11 @@
       <el-col :span="3">区域:</el-col>
       <el-col :class="{'hidden_content':!show}">
         <div class="scenics_box">
-          <a href="#" :class="{'location_name':true}">全部</a>
+          <a :class="{'location_name':true}">全部</a>
           <a
             v-for="(item,index) in scenicsList"
             :key="index"
-            :class="{'location_name':true}"
+            :class="{'location_name':true ,'active':scenic==item.id}"
             @click="handleScenic(index)"
           >{{item.name}}</a>
         </div>
@@ -57,13 +57,17 @@ import AveragePrice from "@/components/hotel/AveragePrice";
 // import MapBox from "@/components/hotel/MapBox";
 export default {
   components: {
-    AveragePrice,
+    AveragePrice
     // MapBox
   },
   props: {
     scenicsList: {
       type: Array,
       default: []
+    },
+    scenic: {
+      type: Number,
+      default: 0
     }
     // hotelDate: {
     //   type: Object,
@@ -89,7 +93,7 @@ export default {
     // 点击景点事件
     handleScenic(index) {
       const id = this.scenicsList[index].id;
-      console.log(id);
+      // console.log(id);
       this.$emit("getScenic", id);
     }
   }
