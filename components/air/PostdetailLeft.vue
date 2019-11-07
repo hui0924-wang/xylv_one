@@ -16,10 +16,10 @@
     <div class="detail_ctrl">
       <div class="detail_ctrl_item">
         <i class="el-icon-edit-outline"></i>
-        <p>评论(100)</p>
+        <p>评论(6)</p>
       </div>
-      <div class="detail_ctrl_item">
-        <i class="el-icon-star-off"></i>
+      <div class="detail_ctrl_item" @click="handlerstar">
+        <i class="el-icon-star-off" :class="isOK?'active':''"></i>
         <p>收藏</p>
       </div>
       <div class="detail_ctrl_item">
@@ -28,79 +28,96 @@
       </div>
       <div class="detail_ctrl_item">
         <i class="iconfont iconding"></i>
-        <p>评论(100)</p>
+        <p>评论({{postDetail.like}})</p>
       </div>
     </div>
     <div class="detail_comments">
       <h5>评论</h5>
 
       <!-- 文本框开始 -->
-      <el-input
-        class="comments_text"
-        type="textarea"
-        :rows="2"
-        placeholder="请输入内容"
-       >
-     </el-input>
-     <!-- 文本框结束 -->
+      <el-input class="comments_text" type="textarea" :rows="2" placeholder="请输入内容"></el-input>
+      <!-- 文本框结束 -->
 
-    <div class="comments_picture">
+      <div class="comments_picture">
         <!-- 图片上传开始 -->
-  <div class="picture">
-    <el-upload
-       action="https://jsonplaceholder.typicode.com/posts/"
-       list-type="picture-card">
-       <i class="el-icon-plus"></i>
-    </el-upload>
-  </div>
-      <!-- 图片上传结束 -->
-
-      <!-- 提交按钮 -->
-      <div>
-        <el-button type="primary">提交</el-button>
+        <div class="picture">
+          <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card">
+            <i class="el-icon-plus"></i>
+          </el-upload>
         </div>
-      <!-- 提交按钮 -->
-    </div>
+        <!-- 图片上传结束 -->
 
-    <!-- 评论 -->
-    <PostdetailLeftList /> 
-     <!-- 评论 -->
+        <!-- 提交按钮 -->
+        <div>
+          <el-button type="primary">提交</el-button>
+        </div>
+        <!-- 提交按钮 -->
+      </div>
 
+      <!-- 评论 -->
+      <PostdetailLeftList />
+      <!-- 评论 -->
     </div>
   </div>
 </template>
 
 <script>
-import PostdetailLeftList from '@/components/air/PostdetailLeftList'
+import PostdetailLeftList from "@/components/air/PostdetailLeftList";
 export default {
-  data(){
+  props:['id'],
+  data() {
     return {
-      postDetail:[]
-    }
+      postDetail: [],
+      isOK: false
+    };
   },
   components: {
     PostdetailLeftList
   },
   methods: {
-    
+    handlerstar() {
+      let id = this.$route.query.id;
+      console.log(this.$store.state.user.userinfo.token);
+      let token = this.$store.state.user.userinfo.token;
+      this.$axios
+        .get(`/posts/star?id=${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.message === "收藏成功") {
+            this.isOK = !this.isOK;
+            this.$message.success(res.data.message);
+          }
+        });
+    }
   },
   mounted() {
-    console.log(this.$route.query.id)
-    let id = this.$route.query.id
-    this.$axios.get("/posts",{params:{id}}).then(res => {
+    console.log(this.$route.query.id);
+    let id = this.$route.query.id;
+    this.$axios.get("/posts", { params: { id } }).then(res => {
       console.log(res);
-      this.postDetail = res.data.data[0]
+      this.postDetail = res.data.data[0];
       console.log(this.postDetail);
     });
-   
+    
+  },
+  watch:{
+    id(){
+      this.$router.push(`/post/detail?id=${this.id}`)
+      this.$axios.get(`/posts?id=${this.id}`).then(res => {
+      console.log(res);
+      this.postDetail = res.data.data[0];
+      console.log(this.postDetail);
+    });
+    }
   }
- 
-}
+};
 </script>
 
 <style lang='less' scoped>
 * {
-    max-width: 700px!important;
+  max-width: 700px !important;
 }
 .Postdetailleft {
   width: 1000px;
@@ -108,7 +125,6 @@ export default {
     padding: 20px 0;
   }
   .detail_title {
-   
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
   }
@@ -117,15 +133,11 @@ export default {
     text-align: right;
     padding: 20px;
   }
-   .detail_content {
-     
-       /deep/img{
-     width: 100%;
-    // object-fit: cover;
-      
+  .detail_content {
+   
+     /deep/  img{
+         max-width: 100%;
     }
-     
-    
   }
   .detail_ctrl {
     display: flex;
@@ -136,6 +148,10 @@ export default {
       align-items: center;
       justify-content: center;
       padding: 50px 20px;
+      .active {
+        color: green;
+      }
+
       i {
         font-size: 34px;
         color: orange;
@@ -156,16 +172,15 @@ export default {
       padding-bottom: 10px;
     }
     .comments_picture {
-      display:flex;
+      display: flex;
       justify-content: space-between;
 
       /deep/.el-upload--picture-card {
         width: 100px;
-    height: 100px;
-    line-height: 100px;
+        height: 100px;
+        line-height: 100px;
       }
     }
-   
   }
 }
 </style>

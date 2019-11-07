@@ -1,21 +1,33 @@
 <template>
   <div class="postdetail">
     <div class="postdetail_left">
-      <PostdetailLeft />
+      <PostdetailLeft :id="id"/>
     </div>
     <div class="postdetail_right">
-      2
+      <PostdetailRight @sendId="getId"/>
     </div>
   </div>
 </template>
 
 <script>
 import PostdetailLeft from "@/components/air/PostdetailLeft";
+import PostdetailRight from "@/components/air/PostdetailRight";
 
 export default {
-components: {
-  PostdetailLeft
-}
+  data(){
+    return{
+      id:''
+    }
+  },
+  components: {
+    PostdetailLeft,
+    PostdetailRight
+  },
+  methods:{
+    getId(v){
+      this.id = v
+    }
+  }
 }
 </script>
 
