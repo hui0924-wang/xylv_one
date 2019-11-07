@@ -16,7 +16,7 @@
            <p>{{commentParents.content}}</p>
          </div>
          <div class="text_reply" @mouseover="mouseover" @mouseout="mouseover">
-           <a href="javascript:;" v-html="isShow?'回复':''"></a>
+           <a href="javascript:;" v-html="isShow?'回复':''" @click="sendID(commentParents.id)"></a>
          </div>
        </div>
      </div>
@@ -40,6 +40,10 @@ data () {
  methods:{
     mouseover(){
       this.isShow = !this.isShow
+    },
+    sendID(id){
+      // console.log(id)
+      this.$emit('forID',id)
     }
   }
 }

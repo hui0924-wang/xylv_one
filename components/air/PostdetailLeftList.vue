@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="list_text">
-          <PostdetailComments v-if="item.parent" :commentParents="item.parent" />
+          <PostdetailComments @forID="getChildrenID" v-if="item.parent" :commentParents="item.parent" />
           <div class="text_area">
              <p>{{item.content}}</p>
           </div>
@@ -22,7 +22,7 @@
                 <img src="" alt="">
               </div>
             </div> -->
-          <div class="text_reply" @mouseover="mouseover" @mouseout="mouseover">
+          <div class="text_reply" @mouseover="mouseover" @mouseout="mouseover" @click="sendID(item.id)">
             <a href="javascript:;" v-html="isShow?'回复':''"></a>
         </div>
       </div>
@@ -51,7 +51,8 @@ export default {
       pageInfo:{
         page:1,
         size:2
-      }   
+      },
+      replayID:''   
     }
   },
   components:{
@@ -87,6 +88,18 @@ export default {
         this.list = res.data.data
         this.total = res.data.total
       })
+    },
+    sendID(id){
+      // console.log(id)
+      this.replayID = id
+    },
+    getChildrenID(id){
+      this.replayID = id
+    }
+  },
+  watch:{
+    id(){
+      this.$emit('replayID',this.id)
     }
   }
 }

@@ -9,7 +9,7 @@
     <div class="detail_title">
       <h1>{{postDetail.title}}</h1>
     </div>
-    <div class="detail_time">攻略：{{postDetail.updated_at}}&nbsp;&nbsp;&nbsp;阅读：{{postDetail.watch}}</div>
+    <div class="detail_time">攻略：{{postDetail.updated_at | filtersL}}&nbsp;&nbsp;&nbsp;阅读：{{postDetail.watch}}</div>
     <div class="detail_content">
       <div v-html="postDetail.content"></div>
     </div>
@@ -26,16 +26,22 @@
         <i class="el-icon-share"></i>
         <p>分享</p>
       </div>
-      <div class="detail_ctrl_item">
+      <div class="detail_ctrl_item" @click="likethisartical">
         <i class="iconfont iconding"></i>
         <p>评论({{postDetail.like}})</p>
       </div>
     </div>
     <div class="detail_comments">
       <h5>评论</h5>
-
+      <el-tag v-if="id" closable :type="info" @close="delId"></el-tag>
       <!-- 文本框开始 -->
-      <el-input class="comments_text" type="textarea" :rows="2" placeholder="请输入内容"></el-input>
+      <el-input
+        class="comments_text"
+        v-model="commentsText"
+        type="textarea"
+        :rows="2"
+        placeholder="请输入内容"
+      ></el-input>
       <!-- 文本框结束 -->
 
       <div class="comments_picture">
@@ -49,13 +55,13 @@
 
         <!-- 提交按钮 -->
         <div>
-          <el-button type="primary">提交</el-button>
+          <el-button type="primary" @click="setComment">提交</el-button>
         </div>
         <!-- 提交按钮 -->
       </div>
 
       <!-- 评论 -->
-      <PostdetailLeftList />
+      <PostdetailLeftList @replayID="getID" />
       <!-- 评论 -->
     </div>
   </div>
@@ -64,11 +70,14 @@
 <script>
 import PostdetailLeftList from "@/components/air/PostdetailLeftList";
 export default {
-  props:['id'],
+  props: ["id"],
   data() {
     return {
       postDetail: [],
-      isOK: false
+      isOK: false,
+      commentsText: "",
+      id: "",
+      replayWho: ""
     };
   },
   components: {
@@ -90,6 +99,43 @@ export default {
             this.$message.success(res.data.message);
           }
         });
+    },
+    likethisartical() {
+      let id = this.$route.query.id;
+      let token = this.$store.state.user.userinfo.token;
+      this.$axios
+        .get(`/posts/like?id=${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.message === "点赞成功") {
+            this.$message.success(res.data.message);
+            console.log(this.postDetail.like);
+            this.postDetail.like += 1;
+          }
+        });
+    },
+    getID(id) {
+      this.id = id;
+    },
+    setComment() {
+      let token = this.$store.state.user.userinfo.token;
+      let postID = this.$route.query.id;
+      this.$axios
+        .post(`/comments`,
+        {
+          content:this.commentsText,
+          post:postID
+        },
+         {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(res => {
+          console.log(res);
+        });
     }
   },
   mounted() {
@@ -100,16 +146,15 @@ export default {
       this.postDetail = res.data.data[0];
       console.log(this.postDetail);
     });
-    
   },
-  watch:{
-    id(){
-      this.$router.push(`/post/detail?id=${this.id}`)
+  watch: {
+    id() {
+      this.$router.push(`/post/detail?id=${this.id}`);
       this.$axios.get(`/posts?id=${this.id}`).then(res => {
-      console.log(res);
-      this.postDetail = res.data.data[0];
-      console.log(this.postDetail);
-    });
+        console.log(res);
+        this.postDetail = res.data.data[0];
+        console.log(this.postDetail);
+      });
     }
   }
 };
@@ -134,9 +179,8 @@ export default {
     padding: 20px;
   }
   .detail_content {
-   
-     /deep/  img{
-         max-width: 100%;
+    /deep/ img {
+      max-width: 100%;
     }
   }
   .detail_ctrl {
