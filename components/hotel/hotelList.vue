@@ -1,9 +1,9 @@
 <template>
   <div class="hotelList">
     <div class="hotelItem" v-for="(item,index) in hotelDate.data" :key="index">
-      <img :src="item.photos" style="width:320px;height:210px" alt="">
+      <img :src="item.photos" style="width:320px;height:210px" @click="$router.push(`/hotel/${item.id}`)" alt="">
       <div class="info">
-        <div class="name">
+        <div class="name" @click="$router.push(`/hotel/${item.id}`)">
           <p>{{item.name}}</p>
           <div>
             <span>{{item.alias}}</span>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="priceList" style="width:230px">
-        <div class="priceItem" v-for="(name,index) in item.products" :key="index">
+        <div class="priceItem" v-for="(name,index) in item.products" :key="index" @click="open">
           <div>{{name.name}}</div>
           <div>
             <span>￥{{name.price}}</span>起
@@ -59,18 +59,20 @@
   </div>
 </template>
 
+
 <script>
 export default {
   props:{
     hotelDate:{
       type:Object,
-      default:{}
+      default:{},
     }
   },
   data(){
     return{
       star:3.5,
-      total: 0
+      total: 0,
+      isActive: false
     }
   },
   filters:{
@@ -85,10 +87,14 @@ export default {
       // this.init({_start:(val-1)*10})
       let str = `&_start=${(val-1)*10}`
       this.$emit('handlePage',val)
+    },
+    open(){
+      window.open('https://hotels.ctrip.com/hotel/694679.html','_blank')
     }
   }
 }
 </script>
+
 
 <style lang="less" scoped>
 .hotelList{
@@ -98,6 +104,9 @@ export default {
     justify-content: space-between;
     padding: 20px 0 20px 10px;
     border-bottom: 1px solid rgb(238, 238, 238);
+    >img{
+      cursor: pointer;
+    }
     .info{
       flex: 1;
       padding-left: 20px;
@@ -106,6 +115,9 @@ export default {
         font-size: 18px;
         p{
           font-size: 26px;
+          &:hover{
+            cursor: pointer;
+          }
         }
         div{
           color: rgb(153, 153, 153);
@@ -156,6 +168,10 @@ export default {
         display: flex;
         justify-content: space-between;
         border-bottom: 1px  solid rgb(238, 240, 246);
+        &:hover{
+          cursor: pointer;
+          background-color: rgb(245, 247, 250);
+        }
         :last-child{
           :first-child{
             color: orange;
@@ -167,6 +183,9 @@ export default {
   }
   .pagination{
     text-align: right;
+  }
+  .active{
+    background-color: rgb(245, 247, 250);
   }
 }
 </style>

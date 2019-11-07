@@ -1,47 +1,126 @@
 <template>
-  <div class="city">
+  <div class="map_box">
     <div id="container"></div>
+    <div class="loading" v-if="!loaded" />
   </div>
 </template>
 
 <script>
 export default {
-  mounted() {
-    window.onLoad = function() {
-      // 5  js 加载完毕了！！！
-      var map = new AMap.Map("container", {
-        // 地图的缩放倍数
-        zoom: 12,
-        // 要显示的经纬度[经度，纬度]
-        center: [116.39, 39.9]
-      });
-      // 6 .创建一个 点标记
-      var marker = new AMap.Marker({
-        position: [116.39, 39.9] //位置
-      });
-      map.add(marker); //添加到地图
+  props: ["value"],
+  data() {
+    return {
+      loaded: false
     };
+  },
 
-    // 1 定义 高度地图 js 路径
+  mounted() {
+    window.onLoad = () => {
+      const map = new AMap.Map("container", {
+        // center: [118.9213, 31.75649]
+      });
+      this.map = map;
+      this.addMarks();
+    };
     var url =
       "https://webapi.amap.com/maps?v=1.4.15&key=9222c2448e360235eddd73326dc97b24&callback=onLoad";
-    // 2 手动创建了一个script标签
     var jsapi = document.createElement("script");
     jsapi.charset = "utf-8";
-    // 3 定义 script标签的 引入地址
     jsapi.src = url;
-    // 4 把script标签 放入到 html标签的 head标签的中
     document.head.appendChild(jsapi);
+  },
+  methods: {
+    addMarks() {
+      // console.log(this.value);
+      if (typeof AMap !== "object" || !this.value) {
+        return;
+      }
+      const map = this.map;
+      // 点标记数组
+      const markers = this.value.map((hotelData, i) => {
+        const {
+          name,
+          address,
+          location: { latitude, longitude }
+        } = hotelData;
+        const position = new AMap.LngLat(longitude, latitude);
+        // 创建多个点标记
+        const marker = new AMap.Marker({
+          position,
+          title: name,
+          content: `<span class="marker">${i + 1}</span>`,
+          text: address,
+          topWhenClick: true
+        });
+        // 信息窗体
+        const infoWindow = new AMap.InfoWindow({
+          content: `<span style="font-size: 12px;color: #333">${name}</span>`,
+          offset: new AMap.Pixel(0, -32)
+        });
+        function showInfoWin() {
+          //  打开信息窗体
+          infoWindow.open(map, position);
+        }
+        function closeInfoWin() {
+          //  关闭信息窗体
+          infoWindow.close();
+        }
+        marker.on("mouseover", showInfoWin);
+        marker.on("mouseout", closeInfoWin);
+        return marker;
+      });
+      map.clearMap();
+      map.add(markers); //添加到地图
+      map.setFitView();
+    }
+  },
+  watch: {
+    // 常规方式
+    value: {
+      handler(newV, oldV) {
+        this.loaded = !!this.value;
+        // console.log(newV, oldV);
+        if (this.map) {
+          if (!this.value) {
+            this.map.clearMap();
+          } else {
+            this.addMarks();
+          }
+        }
+      },
+      deep: true
+    }
   }
 };
 </script>
 
-<style>
-.city {
+<style lang="less" scoped>
+.map_box {
   width: 100%;
+  position: relative;
 }
 #container {
   width: 420px;
   height: 260px;
+}
+/deep/ .marker {
+  display: inline-block;
+  width: 22px;
+  height: 36px;
+  background-image: url(https://webapi.amap.com/theme/v1.3/markers/b/mark_b.png);
+  background-size: 22px 36px;
+  text-align: center;
+  line-height: 24px;
+  color: #fff;
+}
+.loading {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  background: rgba(0, 0, 0, 0.5)
+    url("http://157.122.54.189:9093/images/loading.gif") center center no-repeat;
 }
 </style>

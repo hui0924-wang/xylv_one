@@ -1,81 +1,84 @@
 <template>
-  <div class="hotel_options">
-    <el-row :gutter="10">
-      <!-- 这里 -->
-      <el-col :span="14">
-        <el-row type="flex" class="options_row">
-          <el-col :span="3">区域:</el-col>
-          <el-col :class="{'hidden_content':!show}">
-            <div class="scenics_box">
-              <a href="#" :class="{'location_name':true}">全部</a>
-              <a
-                v-for="(item,index) in scenicsList"
-                :key="index"
-                :class="{'location_name':true}"
-                @click="handleScenic(index)"
-              >{{item.name}}</a>
-            </div>
-            <a href="#" @click="toggleshow">
-              <i class="el-icon-d-arrow-right"></i>
-              等{{scenicsList.length}}个区域
-            </a>
-          </el-col>
-        </el-row>
-        <el-row type="flex" class="options_row">
-          <el-col :span="3">攻略:</el-col>
-          <el-col>暂无攻略</el-col>
-        </el-row>
-        <el-row type="flex" class="options_row price_row">
-          <el-col :span="3">
-            均价
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="等级均价由平日价格计算得出，节假日价格会有上浮。"
-              placement="top-start"
-            >
-              <sup class="question_mark">?</sup>
-            </el-tooltip>:
-          </el-col>
-          <el-col>
-            <el-row type="flex" justify="start">
-              <el-col :span="6">
-                <AveragePrice :starLevel="3" :price="332" />
-              </el-col>
-              <el-col :span="6">
-                <AveragePrice :starLevel="4" :price="521" />
-              </el-col>
-              <el-col :span="6">
-                <AveragePrice :starLevel="5" :price="768" />
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-      </el-col>
-      <el-col :span="10">
-        <MapBox />
+  <el-row class="hotel_options">
+    <!-- 这里 -->
+    <el-row type="flex" class="options_row">
+      <el-col :span="3">区域:</el-col>
+      <el-col :class="{'hidden_content':!show}">
+        <div class="scenics_box">
+          <a :class="{'location_name':true}">全部</a>
+          <a
+            v-for="(item,index) in scenicsList"
+            :key="index"
+            :class="{'location_name':true ,'active':scenic==item.id}"
+            @click="handleScenic(index)"
+          >{{item.name}}</a>
+        </div>
+        <a href="#" @click="toggleshow">
+          <i class="el-icon-d-arrow-right"></i>
+          等{{scenicsList.length}}个区域
+        </a>
       </el-col>
     </el-row>
-  </div>
+    <el-row type="flex" class="options_row">
+      <el-col :span="3">攻略:</el-col>
+      <el-col>暂无攻略</el-col>
+    </el-row>
+    <el-row type="flex" class="options_row price_row">
+      <el-col :span="3">
+        均价
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="等级均价由平日价格计算得出，节假日价格会有上浮。"
+          placement="top-start"
+        >
+          <sup class="question_mark">?</sup>
+        </el-tooltip>:
+      </el-col>
+      <el-col>
+        <el-row type="flex" justify="start">
+          <el-col :span="6">
+            <AveragePrice :starLevel="3" :price="332" />
+          </el-col>
+          <el-col :span="6">
+            <AveragePrice :starLevel="4" :price="521" />
+          </el-col>
+          <el-col :span="6">
+            <AveragePrice :starLevel="5" :price="768" />
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+  </el-row>
 </template>
 
 <script>
 import AveragePrice from "@/components/hotel/AveragePrice";
-import MapBox from "@/components/hotel/MapBox";
+// import MapBox from "@/components/hotel/MapBox";
 export default {
   components: {
-    AveragePrice,
-    MapBox
+    AveragePrice
+    // MapBox
   },
   props: {
     scenicsList: {
       type: Array,
       default: []
+    },
+    scenic: {
+      type: Number,
+      default: 0
     }
+    // hotelDate: {
+    //   type: Object,
+    //   default: {
+    //   }
+    // }
   },
   mounted() {
     setTimeout(() => {
-      console.log(this.scenicsList);
+      // console.log(this.scenicsList);
+      // console.log(this.hotelDate);
     }, 1000);
   },
   data() {
@@ -90,7 +93,7 @@ export default {
     // 点击景点事件
     handleScenic(index) {
       const id = this.scenicsList[index].id;
-      console.log(id);
+      // console.log(id);
       this.$emit("getScenic", id);
     }
   }

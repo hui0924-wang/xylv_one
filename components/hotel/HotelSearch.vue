@@ -99,15 +99,22 @@ export default {
       // 子传父数据
       searchData: {
         person: 0,
-        city: 74,
+        city: "",
         enterTime: "",
         leftTime: ""
       },
 
       // 城市相关数据
       cityData: {
-        name: "南京"
-      }
+        name: ""
+      },
+      // form: {
+      //   city: 74,
+      //   scenic: 3236
+      // },
+      // 酒店详情数据
+      hotelDetail: {}
+
       // // 酒店详情数据
       // hotelDetail: {}
     };
@@ -181,7 +188,21 @@ export default {
   },
   // 页面刷新
   mounted() {
-    // 获取城市数据
+    // 获取地址栏URL的cityId
+    console.log(this.$route.query.city);
+    let cityId = this.$route.query.city;
+    if (cityId) {
+      this.searchData.city = cityId;
+      let cityName = localStorage.getItem("cityName");
+      // console.log(cityName);
+      this.cityData.name = cityName;
+      this.currentCity = cityName;
+    } else {
+      // 默认
+      this.cityData.name = "南京";
+      this.currentCity = "南京";
+      this.searchData.city = "74";
+    }
     this.$axios
       .get("/cities", { params: { name: this.currentCity } })
       .then(res => {
