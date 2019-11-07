@@ -29,7 +29,7 @@ export default {
       hotelInfo: {},
       pageInfo: 0,
       scenicsList: [],
-      currentCityId:'',
+      currentCityId: "",
       othersData: {},
       scenic: 0,
       axiosStr: "",
@@ -64,7 +64,8 @@ export default {
         this.hotelDate = res.data;
         console.log(this.hotelDate);
       });
-      this.$router.push(`/hotel?${str}`);
+      let newStr = str.replace(/[_]in/g, "");
+      this.$router.push(`/hotel?${newStr}`);
     },
     // 处理酒店的基础信息
     handleHotelInfo(val) {
@@ -170,7 +171,7 @@ export default {
   },
   watch: {
     axiosStr() {
-      console.log(this.axiosStr);
+      // console.log(this.axiosStr);
       this.init(this.axiosStr);
     }
   }
